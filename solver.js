@@ -19,5 +19,16 @@ var foo = function() {
   console.log(node1.isHead);
   console.log(node1.coord.r, node1.coord.c);
 
+
+  // Testing Side
+  var vec1 = new Vector2(9, 3);
+  var vec2 = new Vector2(9, 2);
+  var side1 = new Side(vec1, vec2);
+  var vec3 = new Vector2(9, 3);
+  var vec4 = new Vector2(9, 4);
+  var side2 = new Side(vec3, vec4);
+  console.log(side1.equal(side2));
+  console.log(side1.isHorizontal());
+
   return "herp derp";
 } 

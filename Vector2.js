@@ -20,6 +20,6 @@ Vector2.prototype.distTo = function (other) {
   return Math.abs(this.r - other.r) + Math.abs(this.c - other.c);
 };
 
-Vector2.prototype.euqal = function (other) {
-  return (this.r == other.r && this.c == this.c) ? true : false;
+Vector2.prototype.equal = function (other) {
+  return (this.r == other.r && this.c == other.c) ? true : false;
 };
