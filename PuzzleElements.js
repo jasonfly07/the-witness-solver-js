@@ -57,7 +57,7 @@ Block.prototype.getNeighborCoords = function () {
 };
 
 Block.prototype.clone = function() {
-  var copy = new Block(this.coord.r, this.coord.c);
+  var copy = new Block(this.coord);
   copy.visited = this.visited;
   copy.blockType = this.blockType;
   for (offset of this.neighborOffsets.values()) {

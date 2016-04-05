@@ -11,6 +11,7 @@ var Test = function() {
   TestHashSet();
   TestVector2();
   TestSide();
+  TestBlock();
   TestNodeMap();
   TestBlockMap();
   TestPuzzle();
@@ -49,6 +50,17 @@ var TestSide = function() {
   assert(sides.size() == 1);
 }
 
+var TestBlock = function() {
+  var block1 = new Block(new Vector2(1, 2));
+  block1.blockType = BlockType.Black;
+  block1.visited = true;
+
+  var block2 = block1.clone();
+  assert(block2.coord.equals(new Vector2(1, 2)));
+  assert(block2.blockType == BlockType.Black);
+  assert(block2.visited == true);
+}
+
 var TestNodeMap = function() {
   var nm1 = new NodeMap(4, 5);
   var node1 = nm1.getNode(new Vector2(1, 1));
@@ -71,6 +83,12 @@ var TestBlockMap = function() {
   var segment2 = bm1.segment(new Vector2(0, 0));
   assert(segment1.size() == 8);
   assert(segment2.size() == 4);
+
+  // At this point all blocks in bm1 are visited, so we can't perform segment()
+  // on bm2. Just a reminder.
+  var bm2 = bm1.clone();
+  assert(bm2.getBlock(new Vector2(0, 1)).visited);
+  assert(bm2.getBlock(new Vector2(0, 1)).coord.equals(new Vector2(0, 1)));
 }
 
 var TestPuzzle = function() {
