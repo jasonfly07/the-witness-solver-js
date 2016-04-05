@@ -1,7 +1,7 @@
 //// Node
-function Node (r, c) {
-  this.coord = new Vector2(r || 0, c || 0);
-  this.neighborOffsets = [];
+function Node (v) {
+  this.coord = new Vector2(v.r, v.c);
+  this.neighborOffsets = new HashSet();
   this.isEssential = false;
   this.isHead = false;
   this.isTail = false;
@@ -9,10 +9,10 @@ function Node (r, c) {
 };
 
 Node.prototype.getNeighborCoords = function () {
-  var neighborCoords = [];
-  for (i = 0; i < this.neighborOffsets.length; i++) {
-    var offset = this.neighborOffsets[i];
-    neighborCoords.push(this.coord.add(offset));
+  var neighborCoords = new HashSet();
+  for (offset of this.neighborOffsets.values()) {
+    var neighborCoord = this.coord.add(offset);
+    neighborCoords.add(neighborCoord);
   }
   return neighborCoords;
 };
@@ -40,21 +40,31 @@ var BlockType = {
 };
 
 //// Block
-function Block (r, c) {
-  this.coord = new Vector2(r || 0, c || 0);
-  this.neighborOffsets = [];
+function Block (v) {
+  this.coord = new Vector2(v.r, v.c);
+  this.neighborOffsets = new HashSet();
   this.blockType = BlockType.Empty;
   this.visited = false;
 };
 
 Block.prototype.getNeighborCoords = function () {
-  var neighborCoords = [];
-  for (i = 0; i < this.neighborOffsets.length; i++) {
-    var offset = this.neighborOffsets[i];
-    neighborCoords.push(this.coord.add(offset));
+  var neighborCoords = new HashSet();
+  for (offset of this.neighborOffsets.values()) {
+    var neighborCoord = this.coord.add(offset);
+    neighborCoords.add(neighborCoord);
   }
   return neighborCoords;
 };
+
+Block.prototype.clone = function() {
+  var copy = new Block(this.coord.r, this.coord.c);
+  copy.visited = this.visited;
+  copy.blockType = this.blockType;
+  for (offset of this.neighborOffsets.values()) {
+    copy.neighborOffsets.add(offset.clone())
+  }
+  return copy;
+}
 
 //// Side
 function Side (v1, v2) {
@@ -62,23 +72,25 @@ function Side (v1, v2) {
     throw "Invalid side input";
   }
 
+  var v1Copy = v1.clone();
+  var v2Copy = v2.clone();
   if (v1.r < v2.r) {
-    this.vec1 = v1;
-    this.vec2 = v2;
+    this.vec1 = v1Copy;
+    this.vec2 = v2Copy;
   }
   else if (v1.r == v2.r) {
     if (v1.c <= v2.c) {
-      this.vec1 = v1;
-      this.vec2 = v2;
+      this.vec1 = v1Copy;
+      this.vec2 = v2Copy;
     }
     else {
-      this.vec1 = v2;
-      this.vec2 = v1;
+      this.vec1 = v2Copy;
+      this.vec2 = v1Copy;
     }
   }
   else {
-    this.vec1 = v2;
-    this.vec2 = v1;
+    this.vec1 = v2Copy;
+    this.vec2 = v1Copy;
   }
 };
 
@@ -87,6 +99,22 @@ Side.prototype.isHorizontal = function () {
   return (this.vec1.r == this.vec2.r) ? true : false;
 };
 
-Side.prototype.equal = function (other) {
-  return (this.vec1.equal(other.vec1) && this.vec2.equal(other.vec2)) ? true : false;
+Side.prototype.equals = function (other) {
+  return (this.vec1.equals(other.vec1) && this.vec2.equals(other.vec2)) ? true : false;
 };
+
+Side.prototype.clone = function () {
+  return new Side(this.vec1.clone(), this.vec2.clone());
+}
+
+Side.prototype.toString = function () {
+  return this.vec1.toString() + "-" + this.vec2.toString();
+};
+
+Vector2.prototype.hashCode = function() {
+    return this.toString();
+};
+
+Side.prototype.print = function() {
+  console.log(this.toString());
+}
