@@ -232,8 +232,23 @@ Path.prototype.addNode = function (v) {
   return true;
 }
 
-//   // Deal with all unprocessed segments.
-//   // Once reaching a tail, a path would have either 1 or 2 unprocessed segments;
-//   // this method is for cleaning them up.
-//   // Don't run this until reaching a tail.
-//   bool ProcessRemainingSegments();
+// Deal with all unprocessed segments.
+// Once reaching a tail, a path would have either 1 or 2 unprocessed segments;
+// this method is for cleaning them up.
+// Don't run this until reaching a tail.
+Path.prototype.processRemainingSegments = function () {
+  // Look for unvisited block
+  for (r = 0; r < this.blockMap.numRow; r++) {
+    for (c = 0; c < this.blockMap.numCol; c++) {
+      var blockCoord = new Vector2(r, c);
+      var block = this.blockMap.getBlock(blockCoord);
+      // Once found, form a segment & evaluate it
+      if (!block.visited) {
+        var segment = this.blockMap.segment(blockCoord);
+        var currResult = this.evaluateSegment(segment);
+        if (!currResult) return false;
+      }
+    }
+  }
+  return true;
+}
