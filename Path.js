@@ -16,6 +16,14 @@ function Path (puzzle) {
   this.visitedEssentialNodes = new HashSet();
 };
 
+Path.prototype.toString = function () {
+  var pathStr = "";
+  for (i = 0; i < this.path.length; i++) {
+    pathStr = pathStr + this.path[i].toString();
+  }
+  return pathStr;
+}
+
 Path.prototype.clone = function () {
   var copy = new Path(this.puzzle);
   for (i = 0; i < this.path.length; i++) {
@@ -32,6 +40,8 @@ Path.prototype.clone = function () {
   copy.visitedTails = this.visitedTails.clone();
   copy.visitedSides = this.visitedSides.clone();
   copy.visitedEssentialNodes = this.visitedEssentialNodes.clone();
+
+  return copy;
 }
 
 Path.prototype.hasCollectedAllEssentialNodes = function () {
@@ -85,7 +95,7 @@ Path.prototype.evaluateSegment = function (segment) {
   }
 
   // Find all the unvisited nodes in segment
-  if (this.puzzle.essentialNodes.size() > 0) {
+  if (this.puzzle.nodeEssentials.size() > 0) {
     var unvisitedNodes = new HashSet();
     var offsets = new HashSet();
     offsets.add(new Vector2(0, 0));
@@ -111,7 +121,7 @@ Path.prototype.evaluateSegment = function (segment) {
   }
 
   // Find all the unvisited sides in segment
-  if (this.puzzle.essentialSides.size() > 0) {
+  if (this.puzzle.sideEssentials.size() > 0) {
     var unvisitedSides = new HashSet();
     for (v of segment.values()) {
       var corner1 = v.add(new Vector2(0, 0));

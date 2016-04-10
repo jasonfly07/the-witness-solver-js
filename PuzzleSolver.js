@@ -4,20 +4,21 @@ function PuzzleSolver (puzzle, maxNumOutput) {
   this.paths = [];
 };
 
-Puzzle.prototype.solve = function () {
+PuzzleSolver.prototype.solve = function () {
   // Clear the solution container
   this.paths.length = 0;
 
   // Create the stack for DFS
   var pathStack = [];
-  for (v of this.puzzle.nodeHeads.values) {
+  for (v of this.puzzle.nodeHeads.values()) {
     var path = new Path(this.puzzle);
     path.addNode(v);
     pathStack.push(path);
   }
 
   // Perform DFS
-  while (pathStack.length != 0) {
+  // while (pathStack.length != 0) {
+  while (pathStack.length != 0 && pathStack.length < 50) {
     var currPath = pathStack.pop();
 
     // Perform additional evaluation if the current path has reached a goal (tail)
@@ -41,7 +42,7 @@ Puzzle.prototype.solve = function () {
 
         // If currPath survives all the checks above, include it in this.paths
         this.paths.push(endPath);
-        if (this.paths.size() == this.maxNumOutput) {
+        if (this.paths.length == this.maxNumOutput) {
           return;
         }
       }
@@ -73,7 +74,8 @@ Puzzle.prototype.solve = function () {
       for (v of currNodeNeighborCoords.values()) {
         if (!currPath.visitedNodes.contains(v)) {
           var newPath = currPath.clone();
-          if (newPath.addNode(v)) {
+          var isValid = newPath.addNode(v);
+          if (isValid) {
             pathStack.push(newPath);
           }
         }
@@ -84,7 +86,8 @@ Puzzle.prototype.solve = function () {
         if (!currPath.visitedNodes.contains(v)) {
           if (this.puzzle.sideEssentials.contains(new Side(currNode.coord, v))) {
             var newPath = currPath.clone();
-            if (newPath.addNode(v)) {
+            var isValid = newPath.addNode(v);
+            if (isValid) {
               pathStack.push(newPath);
             }
           }
