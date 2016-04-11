@@ -31,7 +31,7 @@ Vector2.prototype.toString = function () {
 };
 
 Vector2.prototype.hashCode = function() {
-    return this.toString();
+  return this.toString();
 };
 
 Vector2.prototype.clone = function() {

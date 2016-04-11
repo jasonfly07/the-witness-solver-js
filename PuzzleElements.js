@@ -60,9 +60,7 @@ Block.prototype.clone = function() {
   var copy = new Block(this.coord);
   copy.visited = this.visited;
   copy.blockType = this.blockType;
-  for (offset of this.neighborOffsets.values()) {
-    copy.neighborOffsets.add(offset.clone())
-  }
+  copy.neighborOffsets = this.neighborOffsets.clone();
   return copy;
 }
 
