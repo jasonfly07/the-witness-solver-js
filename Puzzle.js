@@ -136,25 +136,30 @@ Puzzle.prototype.convertBlackWhiteToEssentialSides = function () {
 
 Puzzle.prototype.regenerate = function () {
   // Set heads & tails
-  for (v of this.nodeHeads.values()) {
+  var nodeHeads = this.nodeHeads.values();
+  for (v of nodeHeads) {
     this.getNode(v).isHead = true;
   }
-  for (v of this.nodeTails.values()) {
+  var nodeTails = this.nodeTails.values();
+  for (v of nodeTails) {
     this.getNode(v).isTail = true;
   }
 
   // Set essentials
-  for (v of this.nodeEssentials.values()) {
+  var nodeEssentials = this.nodeEssentials.values();
+  for (v of nodeEssentials) {
     this.getNode(v).isEssential = true;
   }
 
   // Set obstacles
-  for (s of this.sideObstacles.values()) {
+  var sideObstacles = this.sideObstacles.values();
+  for (s of sideObstacles) {
     this.nodeMap.cutTie(s.vec1, s.vec2);
   }
 
   // Set blocks
-  for (e of this.specialBlocks.entries()) {
+  var specialBlocks = this.specialBlocks.entries();
+  for (e of specialBlocks) {
     this.blockMap.setType(e[0], e[1]);
   }
 

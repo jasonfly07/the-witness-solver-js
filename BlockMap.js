@@ -80,8 +80,8 @@ BlockMap.prototype.segment = function (v) {
   while(blockStack.length != 0) {
     var currBlock = blockStack.pop();
     segment.add(currBlock.coord);
-    var neighborCoords = currBlock.getNeighborCoords();
-    for (neighborCoord of neighborCoords.values()) {
+    var neighborCoords = currBlock.getNeighborCoords().values();
+    for (neighborCoord of neighborCoords) {
       var neighbor = this.getBlock(neighborCoord);
       if (!neighbor.visited) {
         neighbor.visited = true;

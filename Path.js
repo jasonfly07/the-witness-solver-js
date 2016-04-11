@@ -81,12 +81,14 @@ Path.prototype.cutBlockTie = function (v1, v2) {
 }
 
 Path.prototype.evaluateSegment = function (segment) {
+  var segmentCoords = segment.values();
+
   // Are there black & white blocks mixed together?
   // If yes, return false immediately
   if (this.puzzle.hasBlackWhite) {
     var hasWhite = false;
     var hasBlack = false;
-    for (v of segment.values()) {
+    for (v of segmentCoords) {
       var block = this.blockMap.getBlock(v);
       if (block.blockType == BlockType.White) hasWhite = true;
       if (block.blockType == BlockType.Black) hasBlack = true;
@@ -102,8 +104,10 @@ Path.prototype.evaluateSegment = function (segment) {
     offsets.add(new Vector2(0, 1));
     offsets.add(new Vector2(1, 1));
     offsets.add(new Vector2(1, 0));
-    for (v of segment.values()) {
-      for (o of offsets.values()) {
+    var offsetCoords = offsets.values();
+
+    for (v of segmentCoords) {
+      for (o of offsetCoords) {
         var nodeCoord = v.add(o);
         if (!this.visitedNodes.contains(nodeCoord)) {
           unvisitedNodes.add(nodeCoord);
@@ -113,7 +117,8 @@ Path.prototype.evaluateSegment = function (segment) {
 
     // Are there unvisited essential nodes?
     // If yes, return false immediately
-    for (v of unvisitedNodes.values()) {
+    var unvisitedNodeCoords = unvisitedNodes.values();
+    for (v of unvisitedNodeCoords) {
       if (this.puzzle.getNode(v).isEssential) {
         return false;
       }
@@ -123,7 +128,7 @@ Path.prototype.evaluateSegment = function (segment) {
   // Find all the unvisited sides in segment
   if (this.puzzle.sideEssentials.size() > 0) {
     var unvisitedSides = new HashSet();
-    for (v of segment.values()) {
+    for (v of segmentCoords) {
       var corner1 = v.add(new Vector2(0, 0));
       var corner2 = v.add(new Vector2(0, 1));
       var corner3 = v.add(new Vector2(1, 1));
@@ -133,7 +138,9 @@ Path.prototype.evaluateSegment = function (segment) {
       sides.add(new Side(corner2, corner3));
       sides.add(new Side(corner3, corner4));
       sides.add(new Side(corner4, corner1));
-      for (s of sides.values()) {
+
+      var sideValues = sides.values();
+      for (s of sideValues) {
         if (!this.visitedSides.contains(s)) {
           unvisitedSides.add(s.clone()); // clone() probably isn't necessary
         }
@@ -142,7 +149,8 @@ Path.prototype.evaluateSegment = function (segment) {
 
     // Are there unvisited essential sides?
     // If yes, return false immediately
-    for (s of unvisitedSides.values()) {
+    var unvisitedSideCoords = unvisitedSides.values();
+    for (s of unvisitedSideCoords) {
       if (this.puzzle.essentialSides.contains(s)) {
         return false;
       }

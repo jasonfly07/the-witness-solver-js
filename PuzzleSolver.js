@@ -10,7 +10,8 @@ PuzzleSolver.prototype.solve = function () {
 
   // Create the stack for DFS
   var pathStack = [];
-  for (v of this.puzzle.nodeHeads.values()) {
+  var nodeHeads = this.puzzle.nodeHeads.values();
+  for (v of nodeHeads) {
     var path = new Path(this.puzzle);
     path.addNode(v);
     pathStack.push(path);
@@ -61,8 +62,8 @@ PuzzleSolver.prototype.solve = function () {
     // If 2 or 3 of them are (unvisited) essential sides, this path is screwed
     var currEssentialSideCount = 0;
     var currNode = currPath.prevNode();
-    var currNodeNeighborCoords = currNode.getNeighborCoords();
-    for (v of currNodeNeighborCoords.values()) {
+    var currNodeNeighborCoords = currNode.getNeighborCoords().values();
+    for (v of currNodeNeighborCoords) {
       if (!currPath.visitedNodes.contains(v)) {
         if (this.puzzle.sideEssentials.contains(new Side(currNode.coord, v))) {
           currEssentialSideCount++;
@@ -71,7 +72,7 @@ PuzzleSolver.prototype.solve = function () {
     }
 
     if (currEssentialSideCount == 0) {
-      for (v of currNodeNeighborCoords.values()) {
+      for (v of currNodeNeighborCoords) {
         if (!currPath.visitedNodes.contains(v)) {
           var newPath = currPath.clone();
           var isValid = newPath.addNode(v);
@@ -82,7 +83,7 @@ PuzzleSolver.prototype.solve = function () {
       }
     }
     else if (currEssentialSideCount == 1) {
-      for (v of currNodeNeighborCoords.values()) {
+      for (v of currNodeNeighborCoords) {
         if (!currPath.visitedNodes.contains(v)) {
           if (this.puzzle.sideEssentials.contains(new Side(currNode.coord, v))) {
             var newPath = currPath.clone();

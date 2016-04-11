@@ -10,7 +10,9 @@ function Node (v) {
 
 Node.prototype.getNeighborCoords = function () {
   var neighborCoords = new HashSet();
-  for (offset of this.neighborOffsets.values()) {
+
+  var neighborOffsets = this.neighborOffsets.values();
+  for (offset of neighborOffsets) {
     var neighborCoord = this.coord.add(offset);
     neighborCoords.add(neighborCoord);
   }
@@ -49,7 +51,9 @@ function Block (v) {
 
 Block.prototype.getNeighborCoords = function () {
   var neighborCoords = new HashSet();
-  for (offset of this.neighborOffsets.values()) {
+
+  var neighborOffsets = this.neighborOffsets.values();
+  for (offset of neighborOffsets) {
     var neighborCoord = this.coord.add(offset);
     neighborCoords.add(neighborCoord);
   }
