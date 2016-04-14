@@ -127,7 +127,7 @@ Puzzle.prototype.convertBlackWhiteToEssentialSides = function () {
         var bottomBlock = this.getBlock(new Vector2(r + 1, c));
         if ((currBlock.blockType == BlockType.White && bottomBlock.blockType == BlockType.Black) ||
             (currBlock.blockType == BlockType.Black && bottomBlock.blockType == BlockType.White)) {
-          this.addEssentialSide(new Vector2(r, c + 1), new Vector2(r + 1, c + 1));
+          this.addEssentialSide(new Vector2(r + 1, c), new Vector2(r + 1, c + 1));
         }
       }
     }

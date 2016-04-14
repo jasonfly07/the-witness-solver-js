@@ -24,6 +24,9 @@ PuzzleSolver.prototype.solve = function () {
 
     // Perform additional evaluation if the current path has reached a goal (tail)
     if (currPath.prevNode().isTail) {
+      
+      // Debugging
+      // currPath.print();
 
       // Make a copy, since a path can still continue exploring after reaching a tail
       var endPath = currPath.clone();

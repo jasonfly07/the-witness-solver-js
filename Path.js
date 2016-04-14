@@ -24,6 +24,10 @@ Path.prototype.toString = function () {
   return pathStr;
 }
 
+Path.prototype.print = function () {
+  console.log(this.toString());
+}
+
 Path.prototype.clone = function () {
   var copy = new Path(this.puzzle);
   for (i = 0; i < this.path.length; i++) {
@@ -151,13 +155,44 @@ Path.prototype.evaluateSegment = function (segment) {
     // If yes, return false immediately
     var unvisitedSideCoords = unvisitedSides.values();
     for (s of unvisitedSideCoords) {
-      if (this.puzzle.essentialSides.contains(s)) {
+      if (this.puzzle.sideEssentials.contains(s)) {
         return false;
       }
     }
   }
 
-  // TODO: tetris
+  // Are there tetris blocks & does the current segment satisfy them?
+  if (this.puzzle.hasTetris) {
+    var tetrisList = [];
+
+    // Sum of area has to match the current segment
+    var tetrisAreaSum = 0;
+    var segmentArea = segment.size();
+    var hasTetris = false;
+    for (v of segmentCoords) {
+      var block = this.blockMap.getBlock(v);
+      if (block.blockType >= 3) {
+        hasTetris = true;
+        var tetris = new Tetris(block.blockType);
+        tetrisAreaSum += tetris.area;
+        if (tetrisAreaSum > segmentArea) {
+          return false;
+        }
+        tetrisList.push(tetris);
+      }
+    }
+    if (hasTetris && tetrisAreaSum != segmentArea) {
+      return false;
+    }
+
+    // Process if current segment has tetris pieces
+    if (hasTetris) {
+      // Check if all the pieces fit inside this segment
+      if (!this.fitSegmentWithTetris(segment, tetrisList)) {
+        return false;
+      }
+    }
+  }
 
   // Return true if it survives all the way to the end
   return true;
@@ -269,4 +304,42 @@ Path.prototype.processRemainingSegments = function () {
     }
   }
   return true;
+}
+
+Path.prototype.fitSegmentWithTetris = function (segment, tetrisList) {
+  var segmentCoords = segment.values();
+
+  // Base case
+  if (segmentCoords.length == 0 && tetrisList.length == 0) {
+    return true;
+  }
+
+  // Recursive case
+  // For every block, see if we can fit & grow a tetris piece on it
+  // We always pick the last piece of tetrisVector (easier to remove)
+  for (segmentCoord of segmentCoords) {
+    var tetris = tetrisList[tetrisList.length - 1];
+    var canFit = true;
+    for (tetrisCoordOffset of tetris.shape) {
+      var tetrisCoord = segmentCoord.add(tetrisCoordOffset);
+      if (!segment.contains(tetrisCoord)) {
+        canFit = false;
+        break;
+      }
+    }
+
+    // If it fits, we remove tetris from tetrisVector, associated coords from
+    // segmentCoords, and continue the recursion
+    if (canFit) {
+      for (tetrisCoordOffset of tetris.shape) {
+        var tetrisCoord = segmentCoord.add(tetrisCoordOffset);
+        segment.remove(tetrisCoord);
+      }
+      tetrisList.pop();
+      return this.fitSegmentWithTetris(segment, tetrisList);
+    }
+  }
+
+  // Reaching this line means tetris cannot fit into current segment
+  return false;
 }
