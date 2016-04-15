@@ -1,0 +1,36 @@
+#page {
+  margin: 0;
+  padding: 0;
+  background: #faf8ef;
+  color: #776e65;
+  font-size: 18px; 
+}
+
+.main {
+  width: 480px;
+  margin: 0 auto;
+}
+
+.toolbar {
+  width: 480px;
+  height: 100px;
+  /*margin: 10px auto;*/
+}
+
+.puzzle {
+  border-radius: 10px;
+  width: 480px;
+  height: 480px;
+  color: #a4c416;
+  background: #a4c416;
+  /*margin: 0 auto;*/
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+  display: block;
+  float: center; 
+  text-align: center;
+}

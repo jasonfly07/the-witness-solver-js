@@ -1,7 +1,18 @@
 $(document).ready(function() {
   UnitTest();
-  Main();
-  
+  // Main();
+
+  $('#buttonRun').click(function() {
+    var p = document.getElementsByClassName("puzzle")[0];
+    p.style.background = "#f08080";
+    p.style.height = "240px";
+  });
+
+  $(".dropdown-menu li a").click(function () {
+    $(".btn:first-child").text("Row : " + $(this).text());
+    // $(".btn:first-child").val($(this).text());
+    console.log($(this).text());
+  });
 });
 
 var Main = function() {
@@ -18,11 +29,11 @@ var Main = function() {
   
   // PuzzleEssentialBW1(); // very expensive
 
-  PuzzleTetrisOriented1();
-  PuzzleTetrisOriented2();
-  PuzzleTetrisOriented3();
-  PuzzleTetrisOriented4();
-  PuzzleTetrisOriented5();
+  // PuzzleTetrisOriented1();
+  // PuzzleTetrisOriented2();
+  // PuzzleTetrisOriented3();
+  // PuzzleTetrisOriented4();
+  // PuzzleTetrisOriented5();
 } 
 
 // Utility for run solver and profiling
