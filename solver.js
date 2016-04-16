@@ -2,17 +2,25 @@ $(document).ready(function() {
   UnitTest();
   // Main();
 
+  var numRow = 2;
+  var numCol = 2;
+
   $('#buttonRun').click(function() {
     var p = document.getElementsByClassName("puzzle")[0];
     p.style.background = "#f08080";
     p.style.height = "240px";
   });
 
-  $(".dropdown-menu li a").click(function () {
-    $(".btn:first-child").text("Row : " + $(this).text());
-    // $(".btn:first-child").val($(this).text());
-    console.log($(this).text());
+  $('#btn-row .dropdown-menu li').on('click', function(){
+    numRow = parseInt($(this).text());
+    $("#btn-row .btn:first-child").text("Row : " + $(this).text());
   });
+
+  $('#btn-col .dropdown-menu li').on('click', function(){
+    numCol = parseInt($(this).text());
+    $("#btn-col .btn:first-child").text("Col : " + $(this).text());
+  });
+
 });
 
 var Main = function() {
