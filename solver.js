@@ -5,12 +5,7 @@ $(document).ready(function() {
   var numRow = 2;
   var numCol = 2;
 
-  $('#buttonRun').click(function() {
-    var p = document.getElementsByClassName("puzzle")[0];
-    p.style.background = "#f08080";
-    p.style.height = "240px";
-  });
-
+  // Get row & col
   $('#btn-row .dropdown-menu li').on('click', function(){
     numRow = parseInt($(this).text());
     $("#btn-row .btn:first-child").text("Row : " + $(this).text());
@@ -20,6 +15,17 @@ $(document).ready(function() {
     numCol = parseInt($(this).text());
     $("#btn-col .btn:first-child").text("Col : " + $(this).text());
   });
+
+  $('#buttonRun').click(function() {
+    var pw = document.getElementById("puzzleWindow");
+    var pwHeight  = parseInt(getComputedStyle(pw).getPropertyValue("height").split("p")[0]);
+    var pwMargin  = pwHeight * 0.125;
+    var blockSide = (pwHeight - (pwMargin * 2)) / (Math.max(numRow, numCol) - 1);
+    console.log(blockSide);
+    console.log(numRow, numCol);
+  });
+
+
 
 });
 
