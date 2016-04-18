@@ -4,6 +4,12 @@ $(document).ready(function() {
 
   var numRow = 2;
   var numCol = 2;
+  var blockSide = 0;
+  var pathWidth = 0;
+
+  var vertMarginHeight = 0;
+  var horiMarginHeight = 0;
+  var horiMarginWidth  = 0;
 
   // Get row & col
   $('#btn-row .dropdown-menu li').on('click', function(){
@@ -15,22 +21,23 @@ $(document).ready(function() {
     $("#btn-col .btn:first-child").text("Col : " + $(this).text());
   });
 
+  // Set the grid
   $('#buttonRun').click(function() {
     var pw = document.getElementsByClassName("puzzle-window")[0];
     var pwSide  = parseInt(getComputedStyle(pw).getPropertyValue("height").split("p")[0]);
     var pwMargin  = pwSide * 0.125;
-    var pathWidth = pwSide * 0.05;
+    pathWidth = pwSide * 0.05;
     var pathHalf  = pathWidth * 0.5;
 
     // Compute the block size and height & width
-    var blockSide = (pwSide - (pwMargin * 2)) / (Math.max(numRow, numCol) - 1) - pathWidth;
+    blockSide = (pwSide - (pwMargin * 2)) / (Math.max(numRow, numCol) - 1) - pathWidth;
     var puzzleHeight = blockSide * (numRow - 1) + pathWidth * numRow;
     var puzzleWidth  = blockSide * (numCol - 1) + pathWidth * numCol;
 
     // Compute margin lengths
-    var vertMarginHeight = (pwSide - puzzleHeight) / 2;
-    var horiMarginHeight = puzzleHeight;
-    var horiMarginWidth  = (pwSide - puzzleWidth) / 2;
+    vertMarginHeight = (pwSide - puzzleHeight) / 2;
+    horiMarginHeight = puzzleHeight;
+    horiMarginWidth  = (pwSide - puzzleWidth) / 2;
 
     // Set vertical margins
     var vertMargins = document.getElementsByClassName("puzzle-vert-margin");
@@ -113,10 +120,32 @@ $(document).ready(function() {
         }
       }
     }
-
-
   });
 
+  $(".puzzle-window").on("click", ".puzzle-node", function() {
+    var puzzleHead = document.createElement('div');
+    var idStringList = this.id.split("-");
+    var nodeR = parseInt(idStringList[1]);
+    var nodeC = parseInt(idStringList[2]);
+    console.log(nodeR, nodeC);
+
+    var headTop  = vertMarginHeight + nodeR * (blockSide + pathWidth) - pathWidth * 0.5;
+    var headLeft = horiMarginWidth  + nodeC * (blockSide + pathWidth) - pathWidth * 0.5;
+
+
+    puzzleHead.id = this.id + "-head";
+    puzzleHead.className = 'puzzle-head';
+    puzzleHead.style.width = String(pathWidth * 2) + "px";
+    puzzleHead.style.height = String(pathWidth * 2) + "px";
+    puzzleHead.style.position = "absolute";
+    puzzleHead.style.left = String(headLeft) + "px";
+    puzzleHead.style.top = String(headTop) + "px";
+    puzzleHead.style.borderRadius = String(pathWidth) + "px";
+
+    var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
+    puzzleWindow.appendChild(puzzleHead);
+
+  });
 
 
 

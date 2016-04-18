@@ -22,6 +22,7 @@
 }
 
 .puzzle-window {
+  position: relative;
   border-radius: 10px;
   width: 480px;
   height: 480px;
@@ -95,6 +96,14 @@
   border-width: 0px;
   border-style: solid; 
   border-color: #50543A;
+}
+
+.puzzle-head {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  background: #50543A;
+  /*z-index: 1;*/
 }
 
 h1 {
