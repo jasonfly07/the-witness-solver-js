@@ -57,11 +57,32 @@
   background: #50543A;
 }
 
-.puzzle-row {
-  /*margin-bottom: 0px;*/
+.puzzle-node {
+  float: left;
   width: 0px;
   height: 0px;
-  background: #50543A;
+}
+
+.puzzle-side-hori {
+  float: left;
+  width: 0px;
+  height: 0px;
+}
+
+.puzzle-side-vert {
+  float: left;
+  width: 0px;
+  height: 0px;
+}
+
+.puzzle-row-thin {
+  width: 0px;
+  height: 0px;
+}
+
+.puzzle-row-fat {
+  width: 0px;
+  height: 0px;
 }
 
 .puzzle-block {

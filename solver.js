@@ -23,9 +23,9 @@ $(document).ready(function() {
     var pathHalf  = pathWidth * 0.5;
 
     // Compute the block size and height & width
-    var blockSide = (pwSide - (pwMargin * 2)) / (Math.max(numRow, numCol) - 1);
-    var puzzleHeight = blockSide * (numRow - 1);
-    var puzzleWidth  = blockSide * (numCol - 1);
+    var blockSide = (pwSide - (pwMargin * 2)) / (Math.max(numRow, numCol) - 1) - pathWidth;
+    var puzzleHeight = blockSide * (numRow - 1) + pathWidth * numRow;
+    var puzzleWidth  = blockSide * (numCol - 1) + pathWidth * numCol;
 
     // Compute margin lengths
     var vertMarginHeight = (pwSide - puzzleHeight) / 2;
@@ -35,51 +35,89 @@ $(document).ready(function() {
     // Set vertical margins
     var vertMargins = document.getElementsByClassName("puzzle-vert-margin");
     for (i = 0; i < vertMargins.length; i++) {
-      vertMargins[i].style.height = String(vertMarginHeight - pathHalf) + "px";
+      vertMargins[i].style.height = String(vertMarginHeight) + "px";
     }
 
     // Set mid window
     var windowMid = document.getElementsByClassName("puzzle-window-mid")[0];
-    windowMid.style.height = String(horiMarginHeight + pathWidth) + "px";
+    windowMid.style.height = String(horiMarginHeight) + "px";
 
     // Set horizontal margins
     var horiMargins = document.getElementsByClassName("puzzle-hori-margin");
     for (i = 0; i < horiMargins.length; i++) {
-      horiMargins[i].style.width  = String(horiMarginWidth - pathHalf) + "px";
-      horiMargins[i].style.height = String(horiMarginHeight + pathWidth) + "px";
+      horiMargins[i].style.width  = String(horiMarginWidth) + "px";
+      horiMargins[i].style.height = String(horiMarginHeight) + "px";
     }
 
     // Set puzzle body
     var puzzleBody = document.getElementsByClassName("puzzle-body")[0];
-    puzzleBody.style.width   = String(puzzleWidth + pathWidth) + "px";
-    puzzleBody.style.height  = String(puzzleHeight + pathWidth) + "px";
-    puzzleBody.style.padding = String(pathHalf) + "px";
+    puzzleBody.style.width  = String(puzzleWidth) + "px";
+    puzzleBody.style.height = String(puzzleHeight) + "px";
 
     // Clear everything inside puzzleBody
     while (puzzleBody.firstChild) {
       puzzleBody.removeChild(puzzleBody.firstChild);
     }
 
-    // Set puzzle row
-    for (r = 0; r < numRow - 1; r++) {
-      var puzzleRow = document.createElement('div');
-      puzzleRow.className = 'puzzle-row';
-      puzzleRow.style.width  = String(puzzleWidth) + "px";
-      puzzleRow.style.height = String(blockSide) + "px";
-      puzzleBody.appendChild(puzzleRow);
+    // Set puzzleRowThin & puzzleRowFat
+    for (r = 0; r < numRow; r++) {
+      var puzzleRowThin = document.createElement("div");
+      puzzleRowThin.className    = "puzzle-row-thin";
+      puzzleRowThin.style.width  = String(puzzleWidth) + "px";
+      puzzleRowThin.style.height = String(pathWidth) + "px";
+      puzzleBody.appendChild(puzzleRowThin);
 
-      // For each row, set puzzle blocks
-      for (c = 0; c < numCol - 1; c++) {
-        var puzzleBlock = document.createElement('div');
-        puzzleBlock.className = 'puzzle-block';
-        puzzleBlock.style.borderWidth = String(pathHalf) + "px";
-        puzzleBlock.style.width  = String(blockSide) + "px";
-        puzzleBlock.style.height = String(blockSide) + "px";
-        puzzleRow.appendChild(puzzleBlock);
+      // For each puzzleRowThin, pupulate with puzzleNode & puzzleSideHori
+      for (c = 0; c < numCol; c++) {
+        var puzzleNode = document.createElement('div');
+        puzzleNode.id = "n-" + String(r) + "-" + String(c);
+        puzzleNode.className = 'puzzle-node';
+        puzzleNode.style.width  = String(pathWidth) + "px";
+        puzzleNode.style.height = String(pathWidth) + "px";
+        puzzleRowThin.appendChild(puzzleNode);
+
+        if (c != numCol - 1) {
+          var puzzleSideHori = document.createElement('div');
+          puzzleSideHori.id = "s-" + String(r) + "-" + String(c) + "-" + String(r) + "-" + String(c + 1);
+          puzzleSideHori.className = 'puzzle-side-hori';
+          puzzleSideHori.style.width  = String(blockSide) + "px";
+          puzzleSideHori.style.height = String(pathWidth) + "px";
+          puzzleRowThin.appendChild(puzzleSideHori);
+        }
+      }
+
+      if (r != numRow - 1) {
+        var puzzleRowFat = document.createElement("div");
+        puzzleRowFat.className    = "puzzle-row-fat";
+        puzzleRowFat.style.width  = String(puzzleWidth) + "px";
+        puzzleRowFat.style.height = String(blockSide) + "px";
+        puzzleBody.appendChild(puzzleRowFat);
+
+        // For each puzzleRowFat, pupulate with puzzleBlock & puzzleSideVert
+        for (c = 0; c < numCol; c++) {
+          var puzzleSideVert = document.createElement('div');
+          puzzleSideVert.id = "s-" + String(r) + "-" + String(c) + "-" + String(r + 1) + "-" + String(c);
+          puzzleSideVert.className = 'puzzle-side-vert';
+          puzzleSideVert.style.width  = String(pathWidth) + "px";
+          puzzleSideVert.style.height = String(blockSide) + "px";
+          puzzleRowFat.appendChild(puzzleSideVert);
+
+          if (c != numCol - 1) {
+            var puzzleBlock = document.createElement('div');
+            puzzleBlock.id = "b-" + String(r) + "-" + String(c);
+            puzzleBlock.className = 'puzzle-block';
+            puzzleBlock.style.width  = String(blockSide) + "px";
+            puzzleBlock.style.height = String(blockSide) + "px";
+            puzzleRowFat.appendChild(puzzleBlock);
+          }
+        }
       }
     }
 
+
   });
+
+
 
 
 
