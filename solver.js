@@ -10,19 +10,75 @@ $(document).ready(function() {
     numRow = parseInt($(this).text());
     $("#btn-row .btn:first-child").text("Row : " + $(this).text());
   });
-
   $('#btn-col .dropdown-menu li').on('click', function(){
     numCol = parseInt($(this).text());
     $("#btn-col .btn:first-child").text("Col : " + $(this).text());
   });
 
   $('#buttonRun').click(function() {
-    var pw = document.getElementById("puzzleWindow");
-    var pwHeight  = parseInt(getComputedStyle(pw).getPropertyValue("height").split("p")[0]);
-    var pwMargin  = pwHeight * 0.125;
-    var blockSide = (pwHeight - (pwMargin * 2)) / (Math.max(numRow, numCol) - 1);
-    console.log(blockSide);
-    console.log(numRow, numCol);
+    var pw = document.getElementsByClassName("puzzle-window")[0];
+    var pwSide  = parseInt(getComputedStyle(pw).getPropertyValue("height").split("p")[0]);
+    var pwMargin  = pwSide * 0.125;
+    var pathWidth = pwSide * 0.05;
+    var pathHalf  = pathWidth * 0.5;
+
+    // Compute the block size and height & width
+    var blockSide = (pwSide - (pwMargin * 2)) / (Math.max(numRow, numCol) - 1);
+    var puzzleHeight = blockSide * (numRow - 1);
+    var puzzleWidth  = blockSide * (numCol - 1);
+
+    // Compute margin lengths
+    var vertMarginHeight = (pwSide - puzzleHeight) / 2;
+    var horiMarginHeight = puzzleHeight;
+    var horiMarginWidth  = (pwSide - puzzleWidth) / 2;
+
+    // Set vertical margins
+    var vertMargins = document.getElementsByClassName("puzzle-vert-margin");
+    for (i = 0; i < vertMargins.length; i++) {
+      vertMargins[i].style.height = String(vertMarginHeight - pathHalf) + "px";
+    }
+
+    // Set mid window
+    var windowMid = document.getElementsByClassName("puzzle-window-mid")[0];
+    windowMid.style.height = String(horiMarginHeight + pathWidth) + "px";
+
+    // Set horizontal margins
+    var horiMargins = document.getElementsByClassName("puzzle-hori-margin");
+    for (i = 0; i < horiMargins.length; i++) {
+      horiMargins[i].style.width  = String(horiMarginWidth - pathHalf) + "px";
+      horiMargins[i].style.height = String(horiMarginHeight + pathWidth) + "px";
+    }
+
+    // Set puzzle body
+    var puzzleBody = document.getElementsByClassName("puzzle-body")[0];
+    puzzleBody.style.width   = String(puzzleWidth + pathWidth) + "px";
+    puzzleBody.style.height  = String(puzzleHeight + pathWidth) + "px";
+    puzzleBody.style.padding = String(pathHalf) + "px";
+
+    // Clear everything inside puzzleBody
+    while (puzzleBody.firstChild) {
+      puzzleBody.removeChild(puzzleBody.firstChild);
+    }
+
+    // Set puzzle row
+    for (r = 0; r < numRow - 1; r++) {
+      var puzzleRow = document.createElement('div');
+      puzzleRow.className = 'puzzle-row';
+      puzzleRow.style.width  = String(puzzleWidth) + "px";
+      puzzleRow.style.height = String(blockSide) + "px";
+      puzzleBody.appendChild(puzzleRow);
+
+      // For each row, set puzzle blocks
+      for (c = 0; c < numCol - 1; c++) {
+        var puzzleBlock = document.createElement('div');
+        puzzleBlock.className = 'puzzle-block';
+        puzzleBlock.style.borderWidth = String(pathHalf) + "px";
+        puzzleBlock.style.width  = String(blockSide) + "px";
+        puzzleBlock.style.height = String(blockSide) + "px";
+        puzzleRow.appendChild(puzzleBlock);
+      }
+    }
+
   });
 
 

@@ -17,13 +17,63 @@
   /*margin: 10px auto;*/
 }
 
-.puzzle {
+.dropdown {
+  float: left;
+}
+
+.puzzle-window {
   border-radius: 10px;
   width: 480px;
   height: 480px;
-  color: #a4c416;
   background: #a4c416;
-  /*margin: 0 auto;*/
+}
+
+.puzzle-vert-margin {
+  border-radius: 10px;
+  width: 480px;
+  height: 0px;
+  background: #a4c416;
+}
+
+.puzzle-window-mid {
+  width: 480px;
+  height: 0px;
+  background: #a4c416;
+}
+
+.puzzle-hori-margin {
+  float: left;
+  width: 0px;
+  height: 0px;
+  background: #a4c416;
+}
+
+.puzzle-body {
+  border-radius: 10px;
+  float: left;
+  padding: 0px;
+  width: 0px;
+  height: 0px;
+  background: #50543A;
+}
+
+.puzzle-row {
+  /*margin-bottom: 0px;*/
+  width: 0px;
+  height: 0px;
+  background: #50543A;
+}
+
+.puzzle-block {
+  float: left;
+  /*border-radius: 10px;*/
+  width: 0px;
+  height: 0px;
+  background: #a4c416;
+  /*background: #50543A;*/
+  border-width: 0px;
+  border-style: solid; 
+  border-color: #50543A;
 }
 
 h1 {
