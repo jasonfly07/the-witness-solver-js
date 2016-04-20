@@ -1,6 +1,5 @@
 $(document).ready(function() {
   UnitTest();
-  // Main();
 
   var numRow = 2;
   var numCol = 2;
@@ -11,33 +10,92 @@ $(document).ready(function() {
   var horiMarginHeight = 0;
   var horiMarginWidth  = 0;
 
+  // start, end, essential, block
+  var elementToggle = [false, false, false, false];
+
   // Get row & col
   $('#btn-row .dropdown-menu li').on('click', function(){
     numRow = parseInt($(this).text());
     $("#btn-row .btn:first-child").text("Row : " + $(this).text());
+    DrawPuzzleGrid();
   });
   $('#btn-col .dropdown-menu li').on('click', function(){
     numCol = parseInt($(this).text());
     $("#btn-col .btn:first-child").text("Col : " + $(this).text());
+    DrawPuzzleGrid();
   });
 
-  // Set the grid
-  $('#buttonRun').click(function() {
-    var pw = document.getElementsByClassName("puzzle-window")[0];
-    var pwSide  = parseInt(getComputedStyle(pw).getPropertyValue("height").split("p")[0]);
-    var pwMargin  = pwSide * 0.125;
-    pathWidth = pwSide * 0.05;
+  $(".btn-element").click(function() {
+    var clickedID = parseInt(this.id.split("-")[2]);
+    for (i = 0; i < elementToggle.length; i++) {
+      if (i == clickedID) {
+        elementToggle[i] = !elementToggle[i];
+      }
+      else {
+        elementToggle[i] = false;
+      }
+    }
+
+    for (i = 0; i < elementToggle.length; i++) {
+      var btnElement = document.getElementById("btn-element-" + String(i));
+      if (elementToggle[i] == true) {
+        btnElement.style.backgroundColor = "#ff4c4c";
+        btnElement.style.borderColor = "#860926";
+      }
+      else {
+        btnElement.style.backgroundColor = "#337ab7";
+        btnElement.style.borderColor = "#2e6da4";
+      }
+    } 
+  });
+
+  $(".puzzle-window").on("click", ".puzzle-node", function() {
+    var puzzleHead = document.createElement('div');
+    var idStringList = this.id.split("-");
+    var nodeR = parseInt(idStringList[1]);
+    var nodeC = parseInt(idStringList[2]);
+    console.log(nodeR, nodeC);
+
+    var headTop  = vertMarginHeight + nodeR * (blockSide + pathWidth) - pathWidth * 0.5;
+    var headLeft = horiMarginWidth  + nodeC * (blockSide + pathWidth) - pathWidth * 0.5;
+
+    puzzleHead.id = this.id + "-head";
+    puzzleHead.className = 'puzzle-head';
+    puzzleHead.style.width = String(pathWidth * 2) + "px";
+    puzzleHead.style.height = String(pathWidth * 2) + "px";
+    puzzleHead.style.position = "absolute";
+    puzzleHead.style.left = String(headLeft) + "px";
+    puzzleHead.style.top = String(headTop) + "px";
+    puzzleHead.style.borderRadius = String(pathWidth) + "px";
+
+    var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
+    puzzleWindow.appendChild(puzzleHead);
+  });
+
+
+  var ClearPuzzleElements = function() {
+    $(".puzzle-window").find(".puzzle-head").remove();
+  }
+
+  var DrawPuzzleGrid = function() {
+    ClearPuzzleElements();
+
+    // Compute window dimension
+    var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
+    var puzzleWindowSide  = parseInt(getComputedStyle(puzzleWindow).getPropertyValue("height").split("p")[0]);
+    var puzzleWindowMargin  = puzzleWindowSide * 0.125;
+    pathWidth = puzzleWindowSide * 0.05;
     var pathHalf  = pathWidth * 0.5;
 
     // Compute the block size and height & width
-    blockSide = (pwSide - (pwMargin * 2)) / (Math.max(numRow, numCol) - 1) - pathWidth;
+    blockSide = (puzzleWindowSide - (puzzleWindowMargin * 2)) / (Math.max(numRow, numCol) - 1) - pathWidth;
     var puzzleHeight = blockSide * (numRow - 1) + pathWidth * numRow;
     var puzzleWidth  = blockSide * (numCol - 1) + pathWidth * numCol;
 
     // Compute margin lengths
-    vertMarginHeight = (pwSide - puzzleHeight) / 2;
+    vertMarginHeight = (puzzleWindowSide - puzzleHeight) / 2;
     horiMarginHeight = puzzleHeight;
-    horiMarginWidth  = (pwSide - puzzleWidth) / 2;
+    horiMarginWidth  = (puzzleWindowSide - puzzleWidth) / 2;
 
     // Set vertical margins
     var vertMargins = document.getElementsByClassName("puzzle-vert-margin");
@@ -120,37 +178,15 @@ $(document).ready(function() {
         }
       }
     }
-  });
-
-  $(".puzzle-window").on("click", ".puzzle-node", function() {
-    var puzzleHead = document.createElement('div');
-    var idStringList = this.id.split("-");
-    var nodeR = parseInt(idStringList[1]);
-    var nodeC = parseInt(idStringList[2]);
-    console.log(nodeR, nodeC);
-
-    var headTop  = vertMarginHeight + nodeR * (blockSide + pathWidth) - pathWidth * 0.5;
-    var headLeft = horiMarginWidth  + nodeC * (blockSide + pathWidth) - pathWidth * 0.5;
-
-
-    puzzleHead.id = this.id + "-head";
-    puzzleHead.className = 'puzzle-head';
-    puzzleHead.style.width = String(pathWidth * 2) + "px";
-    puzzleHead.style.height = String(pathWidth * 2) + "px";
-    puzzleHead.style.position = "absolute";
-    puzzleHead.style.left = String(headLeft) + "px";
-    puzzleHead.style.top = String(headTop) + "px";
-    puzzleHead.style.borderRadius = String(pathWidth) + "px";
-
-    var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
-    puzzleWindow.appendChild(puzzleHead);
-
-  });
-
-
-
+  }
 
 });
+
+
+
+
+
+
 
 var Main = function() {
   // puzzleSimpleMaze0();

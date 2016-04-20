@@ -103,7 +103,20 @@
   width: 0px;
   height: 0px;
   background: #50543A;
-  /*z-index: 1;*/
+}
+
+.puzzle-tail {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  background: #50543A;
+}
+
+.puzzle-essential {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  background: #1d0810;
 }
 
 h1 {
