@@ -1,4 +1,13 @@
+var ToggleType = {
+  None : 0,
+  Head : 1,
+  Tail : 2,
+  Essential : 3,
+  Obstacle : 4
+};
+
 $(document).ready(function() {
+  // TODO: remove
   UnitTest();
 
   var numRow = 2;
@@ -10,35 +19,37 @@ $(document).ready(function() {
   var horiMarginHeight = 0;
   var horiMarginWidth  = 0;
 
-  // start, end, essential, block
-  var elementToggle = [false, false, false, false];
+  // none, start, end, essential, obstacle
+  var numElement = 5;
+  var elementToggle = ToggleType.None;
 
-  // Get row & col
+  // Gnerate a new puzzle as numRow or numCol is changed
   $('#btn-row .dropdown-menu li').on('click', function(){
     numRow = parseInt($(this).text());
     $("#btn-row .btn:first-child").text("Row : " + $(this).text());
     DrawPuzzleGrid();
+    puzzle = new Puzzle(numRow, numCol);
   });
   $('#btn-col .dropdown-menu li').on('click', function(){
     numCol = parseInt($(this).text());
     $("#btn-col .btn:first-child").text("Col : " + $(this).text());
     DrawPuzzleGrid();
+    puzzle = new Puzzle(numRow, numCol);
   });
 
+  // Switch between different elements to add to the puzzle
   $(".btn-element").click(function() {
     var clickedID = parseInt(this.id.split("-")[2]);
-    for (i = 0; i < elementToggle.length; i++) {
-      if (i == clickedID) {
-        elementToggle[i] = !elementToggle[i];
-      }
-      else {
-        elementToggle[i] = false;
-      }
+    if (elementToggle == clickedID) {
+      elementToggle = 0;
+    }
+    else {
+      elementToggle = clickedID;
     }
 
-    for (i = 0; i < elementToggle.length; i++) {
+    for (i = 1; i < numElement; i++) {
       var btnElement = document.getElementById("btn-element-" + String(i));
-      if (elementToggle[i] == true) {
+      if (elementToggle == i) {
         btnElement.style.backgroundColor = "#ff4c4c";
         btnElement.style.borderColor = "#860926";
       }
@@ -50,31 +61,45 @@ $(document).ready(function() {
   });
 
   $(".puzzle-window").on("click", ".puzzle-node", function() {
-    var puzzleHead = document.createElement('div');
     var idStringList = this.id.split("-");
-    var nodeR = parseInt(idStringList[1]);
-    var nodeC = parseInt(idStringList[2]);
-    console.log(nodeR, nodeC);
+    var r = parseInt(idStringList[1]);
+    var c = parseInt(idStringList[2]);
 
-    var headTop  = vertMarginHeight + nodeR * (blockSide + pathWidth) - pathWidth * 0.5;
-    var headLeft = horiMarginWidth  + nodeC * (blockSide + pathWidth) - pathWidth * 0.5;
+    // Add/remove heads
+    if (elementToggle == ToggleType.Head) {
+      if (puzzle.nodeHeads.contains(new Vector2(r, c))) {
+        puzzle.nodeHeads.remove(new Vector2(r, c));
+        EraseHead(r, c);
+      }
+      else {
+        if (puzzle.nodeTails.contains(new Vector2(r, c))) {
+          EraseTail(r, c);
+        }
+        puzzle.addHead(new Vector2(r, c));
+        DrawHead(r, c);
+      }
+    }
 
-    puzzleHead.id = this.id + "-head";
-    puzzleHead.className = 'puzzle-head';
-    puzzleHead.style.width = String(pathWidth * 2) + "px";
-    puzzleHead.style.height = String(pathWidth * 2) + "px";
-    puzzleHead.style.position = "absolute";
-    puzzleHead.style.left = String(headLeft) + "px";
-    puzzleHead.style.top = String(headTop) + "px";
-    puzzleHead.style.borderRadius = String(pathWidth) + "px";
-
-    var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
-    puzzleWindow.appendChild(puzzleHead);
+    // Add/remove tails
+    // We only allow tails on edges
+    if (elementToggle == ToggleType.Tail && puzzle.nodeMap.isOnEdge(new Vector2(r, c))) {
+      if (puzzle.nodeTails.contains(new Vector2(r, c))) {
+        puzzle.nodeTails.remove(new Vector2(r, c));
+        EraseTail(r, c);
+      }
+      else {
+        if (puzzle.nodeHeads.contains(new Vector2(r, c))) {
+          EraseHead(r, c);
+        }
+        puzzle.addTail(new Vector2(r, c));
+        DrawTail(r, c);
+      }
+    }
   });
-
 
   var ClearPuzzleElements = function() {
     $(".puzzle-window").find(".puzzle-head").remove();
+    $(".puzzle-window").find(".puzzle-tail").remove();
   }
 
   var DrawPuzzleGrid = function() {
@@ -180,6 +205,77 @@ $(document).ready(function() {
     }
   }
 
+  var DrawHead = function(r, c) {
+    var headTop  = vertMarginHeight + r * (blockSide + pathWidth) - pathWidth * 0.5;
+    var headLeft = horiMarginWidth  + c * (blockSide + pathWidth) - pathWidth * 0.5;
+
+    var puzzleHead = document.createElement('div');
+    puzzleHead.id = "head-" + String(r) + "-" + String(c);
+    puzzleHead.className = "puzzle-head puzzle-node";
+    puzzleHead.style.width = String(pathWidth * 2) + "px";
+    puzzleHead.style.height = String(pathWidth * 2) + "px";
+    puzzleHead.style.position = "absolute";
+    puzzleHead.style.left = String(headLeft) + "px";
+    puzzleHead.style.top = String(headTop) + "px";
+    puzzleHead.style.borderRadius = String(pathWidth) + "px";
+
+    var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
+    puzzleWindow.appendChild(puzzleHead);
+  }
+  var EraseHead = function (r, c) {
+    var head = document.getElementById("head-" + String(r) + "-" + String(c));
+    head.parentNode.removeChild(head);
+  }
+
+  var DrawTail = function(r, c) {
+    var puzzleTail = document.createElement('div');
+    puzzleTail.id = "tail-" + String(r) + "-" + String(c);
+    puzzleTail.className = "puzzle-tail puzzle-node";
+    puzzleTail.style.position = "absolute";
+    puzzleTail.style.borderRadius = String(500) + "px";
+
+    if (r == 0) {
+      var tailTop  = vertMarginHeight + r * (blockSide + pathWidth) - pathWidth;
+      var tailLeft = horiMarginWidth  + c * (blockSide + pathWidth);
+      puzzleTail.style.width  = String(pathWidth) + "px";
+      puzzleTail.style.height = String(pathWidth * 2) + "px";
+      puzzleTail.style.top  = String(tailTop) + "px";
+      puzzleTail.style.left = String(tailLeft) + "px";
+    }
+    else if (r == numRow - 1) {
+      var tailTop  = vertMarginHeight + r * (blockSide + pathWidth);
+      var tailLeft = horiMarginWidth  + c * (blockSide + pathWidth);
+      puzzleTail.style.width  = String(pathWidth) + "px";
+      puzzleTail.style.height = String(pathWidth * 2) + "px";
+      puzzleTail.style.top  = String(tailTop) + "px";
+      puzzleTail.style.left = String(tailLeft) + "px";
+    }
+    else if (c == 0) {
+      var tailTop  = vertMarginHeight + r * (blockSide + pathWidth);
+      var tailLeft = horiMarginWidth  + c * (blockSide + pathWidth) - pathWidth;
+      puzzleTail.style.width  = String(pathWidth * 2) + "px";
+      puzzleTail.style.height = String(pathWidth) + "px";
+      puzzleTail.style.top  = String(tailTop) + "px";
+      puzzleTail.style.left = String(tailLeft) + "px";
+    }
+    else { // c == numCol - 1
+      var tailTop  = vertMarginHeight + r * (blockSide + pathWidth);
+      var tailLeft = horiMarginWidth  + c * (blockSide + pathWidth);
+      puzzleTail.style.width  = String(pathWidth * 2) + "px";
+      puzzleTail.style.height = String(pathWidth) + "px";
+      puzzleTail.style.top  = String(tailTop) + "px";
+      puzzleTail.style.left = String(tailLeft) + "px";
+    }
+    var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
+    puzzleWindow.appendChild(puzzleTail);
+  }
+  var EraseTail = function (r, c) {
+    var tail = document.getElementById("tail-" + String(r) + "-" + String(c));
+    tail.parentNode.removeChild(tail);
+  }
+
+  DrawPuzzleGrid();
+  var puzzle = new Puzzle(numRow, numCol);
 });
 
 
