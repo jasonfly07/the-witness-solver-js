@@ -166,8 +166,7 @@ $(document).ready(function() {
     $(".puzzle-window").find(".puzzle-essential-node").remove();
     $(".puzzle-window").find(".puzzle-essential-side").remove();
     $(".puzzle-window").find(".puzzle-obstacle-side").remove();
-
-    
+    $(".puzzle-window").find(".path").remove();
   }
 
   var DrawPuzzleGrid = function() {
