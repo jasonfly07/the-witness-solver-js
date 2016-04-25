@@ -31,6 +31,15 @@ function Puzzle (numR, numC) {
   this.hasTetris = false;
 };
 
+Puzzle.prototype.print = function () {
+  console.log("head:");
+  var headStr = "";
+  for (v of this.nodeHeads.values()) {
+    headStr = headStr + v.toString();
+  }
+  console.log(headStr);
+};
+
 Puzzle.prototype.getNode = function (v) {
   return this.nodeMap.getNode(v);
 };

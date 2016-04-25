@@ -2,7 +2,7 @@ var assert = function(expression) {
   if (!expression) throw "error";
 }
 
-var UnitTest = function() {
+var PuzzleElementTest = function() {
   TestHashSet();
   TestVector2();
   TestSide();
@@ -32,6 +32,7 @@ var TestVector2 = function() {
   var v2 = new Vector2(3, 4);
   var v3 = v1.add(v2).mul(10).sub(new Vector2(10, 10));
   assert(v3.equals(new Vector2(30, 50)));
+  assert(v1.distTo(v2) == 4);
 }
 
 var TestSide = function() {
