@@ -45,6 +45,21 @@
   height: 480px;
 }
 
+.toolbar-element-row {
+  width: 120px;
+  height: 60px;
+}
+
+.toolbar-element-btn {
+  float: left;
+  width: 48px;
+  height: 48px;
+  margin-left: 12px;
+  margin-bottom: 12px;
+  background: #c8db73;
+  border-radius: 8px;
+}
+
 .puzzle-window {
   float: left;
   position: relative;
