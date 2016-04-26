@@ -23,7 +23,16 @@
   <body id="page">
   	<div class="main">
 
-      <div class="toolbar">
+      <div class="toolbar toolbar-top">
+        <div class="toolbar-col">
+          <i class="fa fa-minus-square fa-fw fa-2x rc-square" id="btn-col-minus" aria-hidden="true"></i>
+          <i class="fa fa-square fa-fw fa-2x rc-square"     id="btn-col-1" aria-hidden="true"></i>
+          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-col-2" aria-hidden="true"></i>
+          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-col-3" aria-hidden="true"></i>
+          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-col-4" aria-hidden="true"></i>
+          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-col-5" aria-hidden="true"></i>
+          <i class="fa fa-plus-square fa-fw fa-2x rc-square"  id="btn-col-plus" aria-hidden="true"></i>
+        </div>
 
         <div class="dropdown" id="btn-row">
           <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Row: 2
@@ -60,10 +69,20 @@
 
         <button class="btn btn-primary" id="btn-reset">Reset</button>
         <button class="btn btn-primary" id="btn-solve">Solve</button>
-        <!-- <i class="fa fa-camera-retro fa-3x"></i> -->
-        <i class="fa fa-plus-circle fa-fw fa-2x" id="btn-plus" aria-hidden="true"></i>
-        <i class="fa fa-minus-circle fa-fw fa-2x" aria-hidden="true"></i>
+        
 
+      </div>
+
+      <div class="toolbar toolbar-left">
+        <div class="toolbar-row">
+          <i class="fa fa-minus-square fa-fw fa-2x rc-square" id="btn-row-minus" aria-hidden="true"></i>
+          <i class="fa fa-square fa-fw fa-2x rc-square"     id="btn-row-1"aria-hidden="true"></i>
+          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-row-2"aria-hidden="true"></i>
+          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-row-3"aria-hidden="true"></i>
+          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-row-4"aria-hidden="true"></i>
+          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-row-5"aria-hidden="true"></i>
+          <i class="fa fa-plus-square fa-fw fa-2x rc-square"  id="btn-row-plus" aria-hidden="true"></i>
+        </div>
       </div>
 
       <div class="puzzle-window">
@@ -76,6 +95,8 @@
         </div>
         <div class="puzzle-vert-margin"></div>
       </div>
+
+      <div class="toolbar toolbar-right"></div>
 
   	</div>
   </body>

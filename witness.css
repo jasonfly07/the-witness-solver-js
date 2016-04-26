@@ -6,19 +6,49 @@
   font-size: 18px; 
 }
 
-#btn-plus {
+/*#btn-plus {
   color: #50543A;
 }
-
+*/
 .main {
-  width: 480px;
+  /*width: 480px;*/
+  width:  720px;
+  /*height: 600px;*/
   margin: 0 auto;
 }
 
-.toolbar {
+.toolbar-top {
+  position: relative;
   width: 480px;
   height: 120px;
-  /*margin: 10px auto;*/
+  margin: 0 auto;
+}
+
+.toolbar-col {
+  position: absolute;
+  height: 48px;
+  bottom: 0px;
+  left: 65px;
+}
+
+.toolbar-left {
+  float: left;
+  position: relative;
+  width: 120px;
+  height: 480px;
+}
+
+.toolbar-row {
+  position: absolute;
+  width: 48px;
+  top: 90px;
+  right: 10px;
+}
+
+.toolbar-right {
+  float: left;
+  width: 120px;
+  height: 480px;
 }
 
 .dropdown {
@@ -26,6 +56,7 @@
 }
 
 .puzzle-window {
+  float: left;
   position: relative;
   border-radius: 12px;
   width: 480px;
@@ -146,11 +177,16 @@
   z-index: 3;
 }
 
-h1 {
+/*h1 {
   font-size: 40px;
   font-weight: bold;
   margin: 0;
   display: block;
   float: center; 
   text-align: center;
+}*/
+
+.rc-square {
+  width: 46px;
+  height: 46px;
 }

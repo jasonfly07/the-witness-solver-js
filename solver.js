@@ -24,6 +24,64 @@ $(document).ready(function() {
   var numElement = 5;
   var elementToggle = ToggleType.None;
 
+  $(".toolbar-col").on("click", "#btn-col-minus", function() {
+    if (numCol > 2) {
+      numCol--;
+      DrawPuzzleGrid();
+      DrawRowColBlocks();
+      puzzle = new Puzzle(numRow, numCol);
+    } 
+  });
+
+  $(".toolbar-col").on("click", "#btn-col-plus", function() {
+    if (numCol < 6) {
+      numCol++;
+      DrawPuzzleGrid();
+      DrawRowColBlocks();
+      puzzle = new Puzzle(numRow, numCol);
+    } 
+  });
+
+  $(".toolbar-row").on("click", "#btn-row-minus", function() {
+    if (numRow > 2) {
+      numRow--;
+      DrawPuzzleGrid();
+      DrawRowColBlocks();
+      puzzle = new Puzzle(numRow, numCol);
+    } 
+  });
+
+  $(".toolbar-row").on("click", "#btn-row-plus", function() {
+    if (numRow < 6) {
+      numRow++;
+      DrawPuzzleGrid();
+      DrawRowColBlocks();
+      puzzle = new Puzzle(numRow, numCol);
+    } 
+  });
+
+  var DrawRowColBlocks = function () {
+    for (r = 2; r <= 6; r++) {
+      var btn = document.getElementById("btn-row-" + String(r - 1));
+      if (r <= numRow) {
+        btn.className = "fa fa-square fa-fw fa-2x rc-square";
+      }
+      else {
+        btn.className = "fa fa-square-o fa-fw fa-2x rc-square";
+      }
+    }
+
+    for (c = 2; c <= 6; c++) {
+      var btn = document.getElementById("btn-col-" + String(c - 1));
+      if (c <= numCol) {
+        btn.className = "fa fa-square fa-fw fa-2x rc-square";
+      }
+      else {
+        btn.className = "fa fa-square-o fa-fw fa-2x rc-square";
+      }
+    }
+  }
+
   // Gnerate a new puzzle as numRow or numCol is changed
   $('#btn-row .dropdown-menu li').on('click', function(){
     numRow = parseInt($(this).text());
