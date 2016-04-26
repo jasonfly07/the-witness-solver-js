@@ -1,9 +1,11 @@
 var ToggleType = {
-  None : 0,
-  Head : 1,
-  Tail : 2,
+  None      : 0,
+  Head      : 1,
+  Tail      : 2,
   Essential : 3,
-  Obstacle : 4
+  Obstacle  : 4,
+  Black     : 5,
+  White     : 6
 };
 
 $(document).ready(function() {
@@ -20,8 +22,8 @@ $(document).ready(function() {
   var horiMarginHeight = 0;
   var horiMarginWidth  = 0;
 
-  // none, start, end, essential, obstacle
-  var numElement = 5;
+  // none, start/end, essential/obstacle, black/white
+  var numElement = 7;
   var elementToggle = ToggleType.None;
 
   $(".toolbar-col").on("click", "#btn-col-minus", function() {
@@ -104,28 +106,46 @@ $(document).ready(function() {
 
   $( ".rc-square" )
   .mouseover(function() {
-    this.style.color = "#50543a";
+    // this.style.color = "#50543a";
+    this.style.opacity = 0.75;
   })
   .mouseout(function() {
-    this.style.color = "#727661";
+    // this.style.color = "#727661";
+    this.style.opacity = 0.65;
   })
   .mousedown(function() {
-    this.style.color = "#282a1d";
+    // this.style.color = "#282a1d";
+    this.style.opacity = 1;
   })
   .mouseup(function() {
-    this.style.color = "#727661";
+    // this.style.color = "#727661";
+    this.style.opacity = 0.75;
   });
 
-  $("#btn-reset").click(function() {
+  $("#execute-btn-reset").click(function() {
     ClearPuzzleElements();
   });
 
-  $("#btn-solve").click(function() {
+  $("#execute-btn-solve").click(function() {
     Solve(puzzle);
   });
 
+  $(".execute-btn")
+  .mouseover(function() {
+    this.style.color = "#ffc019";
+  })
+  .mouseout(function() {
+    this.style.color = "#ecf3d0";
+  })
+  .mousedown(function() {
+    this.style.color = "#ff5e2f";
+  })
+  .mouseup(function() {
+    this.style.color = "#ffc019";
+  });
+
   // Switch between different elements to add to the puzzle
-  $(".btn-element").click(function() {
+  $(".toolbar-element-btn").click(function() {
     var clickedID = parseInt(this.id.split("-")[2]);
     if (elementToggle == clickedID) {
       elementToggle = 0;
@@ -135,16 +155,28 @@ $(document).ready(function() {
     }
 
     for (i = 1; i < numElement; i++) {
-      var btnElement = document.getElementById("btn-element-" + String(i));
+      var btnElement = document.getElementById("element-btn-" + String(i));
       if (elementToggle == i) {
-        btnElement.style.backgroundColor = "#ff4c4c";
-        btnElement.style.borderColor = "#860926";
+        btnElement.style.opacity = 1;
       }
       else {
-        btnElement.style.backgroundColor = "#337ab7";
-        btnElement.style.borderColor = "#2e6da4";
+        btnElement.style.opacity = 0.25;
       }
     } 
+  });
+
+  $( ".toolbar-element-btn" )
+  .mouseover(function() {
+    this.style.opacity = 1;
+  })
+  .mouseout(function() {
+    var clickedID = parseInt(this.id.split("-")[2]);
+    if (elementToggle == clickedID) {
+      this.style.opacity = 1;
+    }
+    else {
+      this.style.opacity = 0.25;
+    }
   });
 
   $(".puzzle-window").on("click", ".puzzle-node", function() {
