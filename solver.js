@@ -270,6 +270,18 @@ $(document).ready(function() {
     }
   });
 
+  $(".puzzle-window").on("click", ".puzzle-block", function() {
+    var idStringList = this.id.split("-");
+    var r = parseInt(idStringList[1]);
+    var c = parseInt(idStringList[2]);
+    var v = new Vector2(r, c);
+
+    if (elementToggle == ToggleType.Black) {
+      // TODO
+    }
+    // console.log(idStringList);
+  });
+
   var ClearPuzzleElements = function() {
     $(".puzzle-window").find(".puzzle-head").remove();
     $(".puzzle-window").find(".puzzle-tail").remove();
