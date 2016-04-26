@@ -6,14 +6,8 @@
   font-size: 18px; 
 }
 
-/*#btn-plus {
-  color: #50543A;
-}
-*/
 .main {
-  /*width: 480px;*/
   width:  720px;
-  /*height: 600px;*/
   margin: 0 auto;
 }
 
@@ -28,7 +22,7 @@
   position: absolute;
   height: 48px;
   bottom: 0px;
-  left: 65px;
+  left: 80px;
 }
 
 .toolbar-left {
@@ -49,10 +43,6 @@
   float: left;
   width: 120px;
   height: 480px;
-}
-
-.dropdown {
-  float: left;
 }
 
 .puzzle-window {
@@ -177,16 +167,8 @@
   z-index: 3;
 }
 
-/*h1 {
-  font-size: 40px;
-  font-weight: bold;
-  margin: 0;
-  display: block;
-  float: center; 
-  text-align: center;
-}*/
-
 .rc-square {
+  color: #727661;
   width: 46px;
   height: 46px;
 }

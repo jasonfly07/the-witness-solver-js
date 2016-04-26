@@ -25,39 +25,15 @@
 
       <div class="toolbar toolbar-top">
         <div class="toolbar-col">
-          <i class="fa fa-minus-square fa-fw fa-2x rc-square" id="btn-col-minus" aria-hidden="true"></i>
-          <i class="fa fa-square fa-fw fa-2x rc-square"     id="btn-col-1" aria-hidden="true"></i>
-          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-col-2" aria-hidden="true"></i>
-          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-col-3" aria-hidden="true"></i>
-          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-col-4" aria-hidden="true"></i>
-          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-col-5" aria-hidden="true"></i>
-          <i class="fa fa-plus-square fa-fw fa-2x rc-square"  id="btn-col-plus" aria-hidden="true"></i>
-        </div>
-
-        <div class="dropdown" id="btn-row">
-          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Row: 2
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">6</a></li>
-          </ul>
-        </div>
-            
-        <div class="dropdown" id="btn-col">
-          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Col: 2
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">6</a></li>
-          </ul>
+          <!-- HACK: closing elements in the next line to avoid annoying gaps in between-->
+          <i     class="fa fa-fw fa-2x rc-square rc-btn    fa-minus-square" id="btn-col-minus" aria-hidden="true">
+          </i><i class="fa fa-fw fa-2x rc-square rc-select fa-square"       id="btn-col-1"     aria-hidden="true">
+          </i><i class="fa fa-fw fa-2x rc-square rc-select fa-square-o"     id="btn-col-2"     aria-hidden="true">
+          </i><i class="fa fa-fw fa-2x rc-square rc-select fa-square-o"     id="btn-col-3"     aria-hidden="true">
+          </i><i class="fa fa-fw fa-2x rc-square rc-select fa-square-o"     id="btn-col-4"     aria-hidden="true">
+          </i><i class="fa fa-fw fa-2x rc-square rc-select fa-square-o"     id="btn-col-5"     aria-hidden="true">
+          </i><i class="fa fa-fw fa-2x rc-square rc-btn    fa-plus-square"  id="btn-col-plus"  aria-hidden="true">
+          </i>
         </div>
 
         <div class="btn-group">
@@ -75,13 +51,13 @@
 
       <div class="toolbar toolbar-left">
         <div class="toolbar-row">
-          <i class="fa fa-minus-square fa-fw fa-2x rc-square" id="btn-row-minus" aria-hidden="true"></i>
-          <i class="fa fa-square fa-fw fa-2x rc-square"     id="btn-row-1"aria-hidden="true"></i>
-          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-row-2"aria-hidden="true"></i>
-          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-row-3"aria-hidden="true"></i>
-          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-row-4"aria-hidden="true"></i>
-          <i class="fa fa-square-o fa-fw fa-2x rc-square"     id="btn-row-5"aria-hidden="true"></i>
-          <i class="fa fa-plus-square fa-fw fa-2x rc-square"  id="btn-row-plus" aria-hidden="true"></i>
+          <i class="fa fa-fw fa-2x rc-square rc-btn    fa-minus-square" id="btn-row-minus" aria-hidden="true"></i>
+          <i class="fa fa-fw fa-2x rc-square rc-select fa-square"       id="btn-row-1"     aria-hidden="true"></i>
+          <i class="fa fa-fw fa-2x rc-square rc-select fa-square-o"     id="btn-row-2"     aria-hidden="true"></i>
+          <i class="fa fa-fw fa-2x rc-square rc-select fa-square-o"     id="btn-row-3"     aria-hidden="true"></i>
+          <i class="fa fa-fw fa-2x rc-square rc-select fa-square-o"     id="btn-row-4"     aria-hidden="true"></i>
+          <i class="fa fa-fw fa-2x rc-square rc-select fa-square-o"     id="btn-row-5"     aria-hidden="true"></i>
+          <i class="fa fa-fw fa-2x rc-square rc-btn    fa-plus-square"  id="btn-row-plus"  aria-hidden="true"></i>
         </div>
       </div>
 
@@ -96,7 +72,9 @@
         <div class="puzzle-vert-margin"></div>
       </div>
 
-      <div class="toolbar toolbar-right"></div>
+      <div class="toolbar toolbar-right">
+        
+      </div>
 
   	</div>
   </body>

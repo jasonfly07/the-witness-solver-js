@@ -60,40 +60,60 @@ $(document).ready(function() {
     } 
   });
 
+  $( ".rc-select" ).click( function() {
+    var idStringList = this.id.split("-");
+    if (idStringList[1] === "row") {
+      numRow = parseInt(idStringList[2]) + 1;
+      DrawPuzzleGrid();
+      DrawRowColBlocks();
+      puzzle = new Puzzle(numRow, numCol);
+    }
+    else {
+      numCol = parseInt(idStringList[2]) + 1;
+      DrawPuzzleGrid();
+      DrawRowColBlocks();
+      puzzle = new Puzzle(numRow, numCol);
+    }
+  });
+
   var DrawRowColBlocks = function () {
     for (r = 2; r <= 6; r++) {
       var btn = document.getElementById("btn-row-" + String(r - 1));
       if (r <= numRow) {
-        btn.className = "fa fa-square fa-fw fa-2x rc-square";
+        btn.classList.remove("fa-square-o");
+        btn.classList.add("fa-square");
       }
       else {
-        btn.className = "fa fa-square-o fa-fw fa-2x rc-square";
+        btn.classList.remove("fa-square");
+        btn.classList.add("fa-square-o");
       }
     }
 
     for (c = 2; c <= 6; c++) {
       var btn = document.getElementById("btn-col-" + String(c - 1));
       if (c <= numCol) {
-        btn.className = "fa fa-square fa-fw fa-2x rc-square";
+        btn.classList.remove("fa-square-o");
+        btn.classList.add("fa-square");
       }
       else {
-        btn.className = "fa fa-square-o fa-fw fa-2x rc-square";
+        btn.classList.remove("fa-square");
+        btn.classList.add("fa-square-o");
       }
     }
   }
 
-  // Gnerate a new puzzle as numRow or numCol is changed
-  $('#btn-row .dropdown-menu li').on('click', function(){
-    numRow = parseInt($(this).text());
-    $("#btn-row .btn:first-child").text("Row : " + $(this).text());
-    DrawPuzzleGrid();
-    puzzle = new Puzzle(numRow, numCol);
-  });
-  $('#btn-col .dropdown-menu li').on('click', function(){
-    numCol = parseInt($(this).text());
-    $("#btn-col .btn:first-child").text("Col : " + $(this).text());
-    DrawPuzzleGrid();
-    puzzle = new Puzzle(numRow, numCol);
+  $( ".rc-square" )
+  .mouseover(function() {
+    this.style.color = "#50543a";
+  })
+  .mouseout(function() {
+    this.style.color = "#727661";
+  })
+  .mousedown(function() {
+    this.style.color = "#282a1d";
+  })
+  .mouseup(function() {
+    this.style.color = "#727661";
   });
 
   $("#btn-reset").click(function() {
