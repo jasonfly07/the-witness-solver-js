@@ -34,7 +34,7 @@ var TestPriorityQueue = function() {
   queue.queue(3);
   queue.queue(2);
   var lowest = queue.dequeue();
-  console.log(lowest);
+  assert(lowest == 2);
 }
 
 var TestVector2 = function() {
