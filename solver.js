@@ -138,7 +138,7 @@ $(document).ready(function() {
     this.style.color = "#ecf3d0";
   })
   .mousedown(function() {
-    this.style.color = "#ff5e2f";
+    this.style.color = "#b28611";
   })
   .mouseup(function() {
     this.style.color = "#ffc019";
@@ -167,7 +167,7 @@ $(document).ready(function() {
 
   $( ".toolbar-element-btn" )
   .mouseover(function() {
-    this.style.opacity = 1;
+    this.style.opacity = 0.8;
   })
   .mouseout(function() {
     var clickedID = parseInt(this.id.split("-")[2]);
@@ -177,6 +177,12 @@ $(document).ready(function() {
     else {
       this.style.opacity = 0.25;
     }
+  })
+  .mousedown(function() {
+    this.style.opacity = 1;
+  })
+  .mouseup(function() {
+    this.style.opacity = 0.25;
   });
 
   $(".puzzle-window").on("click", ".puzzle-node", function() {
@@ -277,9 +283,32 @@ $(document).ready(function() {
     var v = new Vector2(r, c);
 
     if (elementToggle == ToggleType.Black) {
-      // TODO
+      if (puzzle.specialBlocks.get(v) == BlockType.Black) {
+        puzzle.specialBlocks.remove(v);
+        EraseSpecialBlock(r, c);
+      }
+      else {
+        if (puzzle.specialBlocks.containsKey(v)) {
+          EraseSpecialBlock(r, c);
+        }
+        puzzle.addSpecialBlock(v, BlockType.Black);
+        DrawBWBlock(r, c, true);
+      }
     }
-    // console.log(idStringList);
+
+    if (elementToggle == ToggleType.White) {
+      if (puzzle.specialBlocks.get(v) == BlockType.White) {
+        puzzle.specialBlocks.remove(v);
+        EraseSpecialBlock(r, c);
+      }
+      else {
+        if (puzzle.specialBlocks.containsKey(v)) {
+          EraseSpecialBlock(r, c);
+        }
+        puzzle.addSpecialBlock(v, BlockType.White);
+        DrawBWBlock(r, c, false);
+      }
+    }
   });
 
   var ClearPuzzleElements = function() {
@@ -288,7 +317,10 @@ $(document).ready(function() {
     $(".puzzle-window").find(".puzzle-essential-node").remove();
     $(".puzzle-window").find(".puzzle-essential-side").remove();
     $(".puzzle-window").find(".puzzle-obstacle-side").remove();
+    $(".puzzle-window").find(".puzzle-block-black").remove();
+    $(".puzzle-window").find(".puzzle-block-white").remove();
     $(".puzzle-window").find(".path").remove();
+    puzzle = new Puzzle(numRow, numCol); 
   }
 
   var DrawPuzzleGrid = function() {
@@ -539,6 +571,38 @@ $(document).ready(function() {
   var EraseObstacleSide = function (r1, c1, r2, c2) {
     var obstacleSide = document.getElementById("os-" + String(r1) + "-" + String(c1) + "-" + String(r2) + "-" + String(c2));
     obstacleSide.parentNode.removeChild(obstacleSide);
+  }
+
+  var DrawBWBlock = function (r, c, isBlack) {
+    var bwMargin = blockSide / 5;
+    var bwSide   = bwMargin * 3;
+    var blockTop  = vertMarginHeight + pathWidth + r * (blockSide + pathWidth) + bwMargin;
+    var blockLeft = horiMarginWidth  + pathWidth + c * (blockSide + pathWidth) + bwMargin;
+
+    var puzzleBlock = document.createElement('div');
+    if (isBlack) {
+      puzzleBlock.id = "bs-" + String(r) + "-" + String(c);
+      puzzleBlock.className = "puzzle-block puzzle-block-black";
+      puzzleBlock.style.backgroundColor = "#000000";
+    }
+    else {
+      puzzleBlock.id = "bs-" + String(r) + "-" + String(c);
+      puzzleBlock.className = "puzzle-block puzzle-block-white";
+      puzzleBlock.style.backgroundColor = "#ffffff";
+    }
+    puzzleBlock.style.width = String(bwSide) + "px";
+    puzzleBlock.style.height = String(bwSide) + "px";
+    puzzleBlock.style.position = "absolute";
+    puzzleBlock.style.left = String(blockLeft) + "px";
+    puzzleBlock.style.top = String(blockTop) + "px";
+    puzzleBlock.style.borderRadius = String(bwSide / 5) + "px";
+
+    var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
+    puzzleWindow.appendChild(puzzleBlock);
+  }
+  var EraseSpecialBlock = function (r, c) {
+    var bs = document.getElementById("bs-" + String(r) + "-" + String(c));
+    bs.parentNode.removeChild(bs);
   }
 
   var Solve = function (puzzle) {
