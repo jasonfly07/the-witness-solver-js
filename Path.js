@@ -48,6 +48,38 @@ Path.prototype.clone = function () {
   return copy;
 }
 
+// cost of A-star
+Path.prototype.cost = function () {
+  var currCoord = this.prevNode.coord;
+
+  // g = distance from head to current node
+  var g = 0;
+  if (this.path.length > 0) {
+    g = currCoord.distTo(this.path[0]);
+  }
+
+  // h = distance from current node to the closest tail
+  var h = 0;
+  if (this.hasTailLeft()) {
+    var allTails = this.puzzle.nodeTails.values();
+    var minTailDist = this.puzzle.nodeRow + this.puzzle.nodeCol;
+    for (v of allTails) {
+      if (!this.visitedTails.contains(v)) {
+        var currTailDist = currCoord.distTo(v);
+        if (currTailDist < minTailDist) {
+          minTailDist = currTailDist;
+        }
+      }
+    }
+    h = minTailDist;
+  }
+  else {
+    h = this.puzzle.nodeRow * this.puzzle.nodeCol; // an arbitrarily large value
+  }
+
+  return g + h;
+}
+
 Path.prototype.hasCollectedAllEssentialNodes = function () {
   return this.puzzle.nodeEssentials.size() == this.visitedEssentialNodes.size();
 }
