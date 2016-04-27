@@ -8,25 +8,25 @@ PuzzleSolver.prototype.solve = function () {
   // Clear the solution container
   this.paths.length = 0;
 
-  // Create the stack for DFS
-  var pathStack = [];
+  // Create the priority queue for A-star
+  var pathPQ = new PriorityQueue({ comparator: function(pa, pb) { return pa.cost() - pb.cost(); }});
   var nodeHeads = this.puzzle.nodeHeads.values();
   for (v of nodeHeads) {
     var path = new Path(this.puzzle);
     path.addNode(v);
-    pathStack.push(path);
+    pathPQ.queue(path);
   }
 
-  // Perform DFS
-  // while (pathStack.length != 0) {
-  while (pathStack.length != 0 && pathStack.length < 50) {
-    var currPath = pathStack.pop();
+  // Perform A-star
+  while (pathPQ.length != 0) {
+    var currPath = pathPQ.dequeue();
+
+    // Debugging
+    // currPath.print();
+    // console.log("cost", currPath.costG(), currPath.costH());
 
     // Perform additional evaluation if the current path has reached a goal (tail)
     if (currPath.prevNode().isTail) {
-      
-      // Debugging
-      // currPath.print();
 
       // Make a copy, since a path can still continue exploring after reaching a tail
       var endPath = currPath.clone();
@@ -80,7 +80,7 @@ PuzzleSolver.prototype.solve = function () {
           var newPath = currPath.clone();
           var isValid = newPath.addNode(v);
           if (isValid) {
-            pathStack.push(newPath);
+            pathPQ.queue(newPath);
           }
         }
       }
@@ -92,7 +92,7 @@ PuzzleSolver.prototype.solve = function () {
             var newPath = currPath.clone();
             var isValid = newPath.addNode(v);
             if (isValid) {
-              pathStack.push(newPath);
+              pathPQ.queue(newPath);
             }
           }
         }

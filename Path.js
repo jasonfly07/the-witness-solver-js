@@ -48,6 +48,48 @@ Path.prototype.clone = function () {
   return copy;
 }
 
+// cost of A-star
+Path.prototype.costG = function () {
+  // g = length of current path
+  return this.path.length == 0 ? 0 : this.path.length - 1;
+}
+
+Path.prototype.costH = function () {
+  if (this.path.length == 0) {
+    return 0;
+  }
+
+  if (this.prevNode().isTail) {
+    return 0;
+  }
+
+  // h = distance from current node to the closest tail
+  var currCoord = this.prevNode().coord;
+  var h = 0;
+  if (this.hasTailLeft()) {
+    var allTails = this.puzzle.nodeTails.values();
+    var minTailDist = this.puzzle.nodeRow + this.puzzle.nodeCol;
+    for (v of allTails) {
+      if (!this.visitedTails.contains(v)) {
+        var currTailDist = currCoord.distTo(v);
+        if (currTailDist < minTailDist) {
+          minTailDist = currTailDist;
+        }
+      }
+    }
+    h = minTailDist;
+  }
+  else {
+    h = this.puzzle.nodeRow * this.puzzle.nodeCol; // an arbitrarily large value
+  }
+
+  return h;
+}
+
+Path.prototype.cost = function () {
+  return this.costG() + this.costH();
+}
+
 Path.prototype.hasCollectedAllEssentialNodes = function () {
   return this.puzzle.nodeEssentials.size() == this.visitedEssentialNodes.size();
 }

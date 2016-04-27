@@ -4,6 +4,7 @@ var assert = function(expression) {
 
 var PuzzleElementTest = function() {
   TestHashSet();
+  TestPriorityQueue();
   TestVector2();
   TestSide();
   TestBlock();
@@ -25,6 +26,15 @@ var TestHashSet = function() {
   vecs.remove(new Vector2(1, 2));
   vecs.remove(new Vector2(2, 1));
   assert(vecs.size() == 3);
+}
+
+var TestPriorityQueue = function() {
+  var queue = new PriorityQueue({ comparator: function(a, b) { return a - b; }});
+  queue.queue(5);
+  queue.queue(3);
+  queue.queue(2);
+  var lowest = queue.dequeue();
+  assert(lowest == 2);
 }
 
 var TestVector2 = function() {
