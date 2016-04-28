@@ -19,7 +19,6 @@ var PuzzleSolverTest = function() {
   // PuzzleTetrisOriented5();
 } 
 
-
 // Utility for run solver and profiling
 var solvePuzzle = function (p) {
   var t0 = performance.now();
