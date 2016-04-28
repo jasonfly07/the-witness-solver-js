@@ -496,18 +496,18 @@ $(document).ready(function() {
   }
 
   var DrawEssentialNode = function(r, c) {
-    var essentialNodeTop  = vertMarginHeight + r * (blockSide + pathWidth);
-    var essentialNodeLeft = horiMarginWidth  + c * (blockSide + pathWidth);
+    var essentialNodeTop  = vertMarginHeight + r * (blockSide + pathWidth) + 0.1 * pathWidth;
+    var essentialNodeLeft = horiMarginWidth  + c * (blockSide + pathWidth) + 0.1 * pathWidth;
 
     var puzzleEssentialNode = document.createElement('div');
     puzzleEssentialNode.id = "en-" + String(r) + "-" + String(c);
     puzzleEssentialNode.className = "puzzle-essential-node puzzle-node";
-    puzzleEssentialNode.style.width = String(pathWidth) + "px";
-    puzzleEssentialNode.style.height = String(pathWidth) + "px";
+    puzzleEssentialNode.style.width = String(pathWidth * 0.8) + "px";
+    puzzleEssentialNode.style.height = String(pathWidth * 0.8) + "px";
     // puzzleEssentialNode.style.position = "absolute";
     puzzleEssentialNode.style.top  = String(essentialNodeTop) + "px";
     puzzleEssentialNode.style.left = String(essentialNodeLeft) + "px";
-    puzzleEssentialNode.style.borderRadius = String(pathWidth / 2) + "px";
+    puzzleEssentialNode.style.borderRadius = String(pathWidth * 0.5) + "px";
 
     var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
     puzzleWindow.appendChild(puzzleEssentialNode);
@@ -521,20 +521,20 @@ $(document).ready(function() {
     var puzzleEssentialSide = document.createElement('div');
     puzzleEssentialSide.id = "es-" + String(r1) + "-" + String(c1) + "-" + String(r2) + "-" + String(c2);
     puzzleEssentialSide.className = "puzzle-essential-side puzzle-side ";
-    puzzleEssentialSide.style.width = String(pathWidth) + "px";
-    puzzleEssentialSide.style.height = String(pathWidth) + "px";
+    puzzleEssentialSide.style.width = String(pathWidth * 0.8) + "px";
+    puzzleEssentialSide.style.height = String(pathWidth * 0.8) + "px";
     // puzzleEssentialSide.style.position = "absolute";
-    puzzleEssentialSide.style.borderRadius = String(pathWidth / 2) + "px";
+    puzzleEssentialSide.style.borderRadius = String(pathWidth * 0.5) + "px";
 
     if (r1 == r2) { // horizontal
-      var essentialSideTop  = vertMarginHeight + r1 * (blockSide + pathWidth);
-      var essentialSideLeft = horiMarginWidth  + c1 * (blockSide + pathWidth) + (blockSide + pathWidth) / 2;
+      var essentialSideTop  = vertMarginHeight + r1 * (blockSide + pathWidth) + 0.1 * pathWidth;
+      var essentialSideLeft = horiMarginWidth  + c1 * (blockSide + pathWidth) + (blockSide + pathWidth) * 0.5 + 0.1 * pathWidth;
       puzzleEssentialSide.style.top  = String(essentialSideTop) + "px";
       puzzleEssentialSide.style.left = String(essentialSideLeft) + "px";
     }
     else { // vertical
-      var essentialSideTop  = vertMarginHeight + r1 * (blockSide + pathWidth) + (blockSide + pathWidth) / 2;
-      var essentialSideLeft = horiMarginWidth  + c1 * (blockSide + pathWidth);
+      var essentialSideTop  = vertMarginHeight + r1 * (blockSide + pathWidth) + (blockSide + pathWidth)  * 0.5 + 0.1 * pathWidth;
+      var essentialSideLeft = horiMarginWidth  + c1 * (blockSide + pathWidth) + 0.1 * pathWidth;
       puzzleEssentialSide.style.top  = String(essentialSideTop) + "px";
       puzzleEssentialSide.style.left = String(essentialSideLeft) + "px";
     }
@@ -555,12 +555,12 @@ $(document).ready(function() {
 
     if (r1 == r2) { // horizontal
       var obstacleSideTop  = vertMarginHeight + r1 * (blockSide + pathWidth);
-      var obstacleSideLeft = horiMarginWidth  + c1 * (blockSide + pathWidth) + (blockSide + pathWidth) / 2;
+      var obstacleSideLeft = horiMarginWidth  + c1 * (blockSide + pathWidth) + (blockSide + pathWidth) * 0.5;
       puzzleObstacleSide.style.top  = String(obstacleSideTop) + "px";
       puzzleObstacleSide.style.left = String(obstacleSideLeft) + "px";
     }
     else { // vertical
-      var obstacleSideTop  = vertMarginHeight + r1 * (blockSide + pathWidth) + (blockSide + pathWidth) / 2;
+      var obstacleSideTop  = vertMarginHeight + r1 * (blockSide + pathWidth) + (blockSide + pathWidth) * 0.5;
       var obstacleSideLeft = horiMarginWidth  + c1 * (blockSide + pathWidth);
       puzzleObstacleSide.style.top  = String(obstacleSideTop) + "px";
       puzzleObstacleSide.style.left = String(obstacleSideLeft) + "px";
@@ -574,8 +574,8 @@ $(document).ready(function() {
   }
 
   var DrawBWBlock = function (r, c, isBlack) {
-    var bwMargin = blockSide / 5;
-    var bwSide   = bwMargin * 3;
+    var bwMargin = blockSide * 0.2;
+    var bwSide   = blockSide * 0.6;
     var blockTop  = vertMarginHeight + pathWidth + r * (blockSide + pathWidth) + bwMargin;
     var blockLeft = horiMarginWidth  + pathWidth + c * (blockSide + pathWidth) + bwMargin;
 
@@ -595,7 +595,7 @@ $(document).ready(function() {
     puzzleBlock.style.position = "absolute";
     puzzleBlock.style.left = String(blockLeft) + "px";
     puzzleBlock.style.top = String(blockTop) + "px";
-    puzzleBlock.style.borderRadius = String(bwSide / 5) + "px";
+    puzzleBlock.style.borderRadius = String(bwSide * 0.2) + "px";
 
     var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
     puzzleWindow.appendChild(puzzleBlock);

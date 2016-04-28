@@ -254,7 +254,7 @@
   width: 0px;
   height: 0px;
   background: #000000;
-  z-index: 2;
+  z-index: 3;
 }
 
 .puzzle-essential-side {
@@ -262,6 +262,7 @@
   width: 0px;
   height: 0px;
   background: #000000;
+  z-index: 3;
 }
 
 .puzzle-obstacle-side {
@@ -276,7 +277,7 @@
   width: 0px;
   height: 0px;
   background: #ffc019;
-  z-index: 3;
+  z-index: 2;
 }
 
 .rc-square {
