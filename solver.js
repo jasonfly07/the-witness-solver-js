@@ -606,12 +606,14 @@ $(document).ready(function() {
   }
 
   var Solve = function (puzzle) {
+    var t0 = performance.now();
     puzzle.regenerate();
-    // puzzle.print();
     var ps = new PuzzleSolver(puzzle, 1);
     ps.solve();
+    var t1 = performance.now();
     if (ps.paths.length > 0) {
       console.log("solution = ", ps.paths[0].toString());
+      console.log("time = " + (t1 - t0) + " ms");
       DrawPath(ps.paths[0]);
     }
   }
