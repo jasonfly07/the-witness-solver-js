@@ -3,7 +3,7 @@
 function Path (puzzle) {
   this.puzzle = puzzle;
   this.path = [];
-  this.blockMap = puzzle.blockMap.clone();
+  this.blockMap = new BlockMap(puzzle.blockMap);
 
   this.touchCount = 0;
   this.leaveCount = 0;
@@ -38,7 +38,7 @@ Path.prototype.clone = function () {
   for (i = 0; i < this.path.length; i++) {
     copy.path.push(this.path[i]);
   }
-  copy.blockMap = this.blockMap.clone();
+  copy.blockMap =  new BlockMap(this.blockMap);
 
   copy.touchCount = this.touchCount;
   copy.leaveCount = this.leaveCount;

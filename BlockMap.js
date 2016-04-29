@@ -1,21 +1,36 @@
 //// BlockMap
-function BlockMap (numR, numC) {
-  if (numR < 1 || numC < 1) {
-    throw "Invalid BlockMap dimension";
-  } 
-  this.numRow = numR;
-  this.numCol = numC;
-
-  this.blockMatrix = [];
-  for (r = 0; r < this.numRow; r++) {
-    var newRow = [];
-    for (c = 0; c < this.numCol; c++) {
-      newRow.push(new Block(new Vector2(r, c)));
+function BlockMap (i0, i1) {
+  if (typeof i0 === "number" && typeof i1 === "number") {
+    var numR = i0;
+    var numC = i1;
+    if (numR < 1 || numC < 1) {
+      throw "Invalid BlockMap dimension";
+    } 
+    this.numRow = numR;
+    this.numCol = numC;
+    this.blockMatrix = [];
+    for (r = 0; r < this.numRow; r++) {
+      var newRow = [];
+      for (c = 0; c < this.numCol; c++) {
+        newRow.push(new Block(new Vector2(r, c)));
+      }
+      this.blockMatrix.push(newRow);
     }
-    this.blockMatrix.push(newRow);
+    this.resetConnectivity();
   }
-
-  this.resetConnectivity();
+  else if (i0.constructor.name === "BlockMap") {
+    var orig = i0;
+    this.numRow = orig.numRow;
+    this.numCol = orig.numCol;
+    this.blockMatrix = [];
+    for (r = 0; r < this.numRow; r++) {
+      var newRow = [];
+      for (c = 0; c < this.numCol; c++) {
+        newRow.push(new Block(orig.blockMatrix[r][c]));
+      }
+      this.blockMatrix.push(newRow);
+    }
+  }
 };
 
 BlockMap.prototype.validCoord = function (v) {
@@ -92,12 +107,12 @@ BlockMap.prototype.segment = function (v) {
   return segment;
 }
 
-BlockMap.prototype.clone = function () {
-  var copy = new BlockMap(this.numRow, this.numCol);
-  for (r = 0; r < copy.numRow; r++) {
-    for (c = 0; c < copy.numCol; c++) {
-      copy.blockMatrix[r][c] = this.blockMatrix[r][c].clone();
-    }
-  }
-  return copy;
-}
+// BlockMap.prototype.clone = function () {
+//   var copy = new BlockMap(this.numRow, this.numCol);
+//   for (r = 0; r < copy.numRow; r++) {
+//     for (c = 0; c < copy.numCol; c++) {
+//       copy.blockMatrix[r][c] = this.blockMatrix[r][c].clone();
+//     }
+//   }
+//   return copy;
+// }

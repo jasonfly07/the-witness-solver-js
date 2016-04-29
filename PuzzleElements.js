@@ -42,11 +42,19 @@ var BlockType = {
 };
 
 //// Block
-function Block (v) {
-  this.coord = new Vector2(v.r, v.c);
-  this.neighborOffsets = new HashSet();
-  this.blockType = BlockType.Empty;
-  this.visited = false;
+function Block (i) {
+  if (i.constructor.name === "Vector2") {
+    this.coord = new Vector2(i.r, i.c);
+    this.neighborOffsets = new HashSet();
+    this.blockType = BlockType.Empty;
+    this.visited = false;
+  }
+  else if (i.constructor.name === "Block") {
+    this.coord = i.coord.clone();
+    this.neighborOffsets = i.neighborOffsets.clone();
+    this.blockType = i.blockType;
+    this.visited = i.visited;
+  }
 };
 
 Block.prototype.getNeighborCoords = function () {
@@ -60,13 +68,13 @@ Block.prototype.getNeighborCoords = function () {
   return neighborCoords;
 };
 
-Block.prototype.clone = function() {
-  var copy = new Block(this.coord);
-  copy.visited = this.visited;
-  copy.blockType = this.blockType;
-  copy.neighborOffsets = this.neighborOffsets.clone();
-  return copy;
-}
+// Block.prototype.clone = function() {
+//   var copy = new Block(this.coord);
+//   copy.visited = this.visited;
+//   copy.blockType = this.blockType;
+//   copy.neighborOffsets = this.neighborOffsets.clone();
+//   return copy;
+// }
 
 //// Side
 function Side (v1, v2) {

@@ -61,7 +61,7 @@ var TestBlock = function() {
   block1.blockType = BlockType.Black;
   block1.visited = true;
 
-  var block2 = block1.clone();
+  var block2 = new Block(block1);
   assert(block2.coord.equals(new Vector2(1, 2)));
   assert(block2.blockType == BlockType.Black);
   assert(block2.visited == true);
@@ -92,7 +92,7 @@ var TestBlockMap = function() {
 
   // At this point all blocks in bm1 are visited, so we can't perform segment()
   // on bm2. Just a reminder.
-  var bm2 = bm1.clone();
+  var bm2 = new BlockMap(bm1);
   assert(bm2.getBlock(new Vector2(0, 1)).visited);
   assert(bm2.getBlock(new Vector2(0, 1)).coord.equals(new Vector2(0, 1)));
 }
