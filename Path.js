@@ -89,16 +89,14 @@ Path.prototype.updateH = function () {
   if (this.unvisitedEssentialNodes.size() > 0 || this.unvisitedEssentialSides.size() > 0) {
     var minDist = this.puzzle.nodeRow + this.puzzle.nodeCol;
     
-    var unvisitedEssentialNodes = this.unvisitedEssentialNodes.values();
-    for (v of unvisitedEssentialNodes) {
-      var currDist = currCoord.distTo(v);
+    for (e of this.unvisitedEssentialNodes.entries()) {
+      var currDist = currCoord.distTo(e[0]);
       if (currDist < minDist) { minDist = currDist; }
     }
 
-    var unvisitedEssentialSides = this.unvisitedEssentialSides.values();
-    for (s of unvisitedEssentialSides) {
-      var currDist1 = currCoord.distTo(s.vec1);
-      var currDist2 = currCoord.distTo(s.vec2);
+    for (e of this.unvisitedEssentialSides.entries()) {
+      var currDist1 = currCoord.distTo(e[0].vec1);
+      var currDist2 = currCoord.distTo(e[0].vec2);
       if (currDist1 < minDist) { minDist = currDist1; }
       if (currDist2 < minDist) { minDist = currDist2; }
     }
@@ -110,9 +108,8 @@ Path.prototype.updateH = function () {
   else if (this.hasTailLeft()) {
     var minDist = this.puzzle.nodeRow + this.puzzle.nodeCol;
 
-    var unvisitedTails = this.unvisitedTails.values();
-    for (v of unvisitedTails) {
-      var currDist = currCoord.distTo(v);
+    for (e of this.unvisitedTails.entries()) {
+      var currDist = currCoord.distTo(e[0]);
       if (currDist < minDist) { minDist = currDist; }
     }
 
@@ -157,15 +154,14 @@ Path.prototype.cutBlockTie = function (v1, v2) {
 }
 
 Path.prototype.evaluateSegment = function (segment) {
-  var segmentCoords = segment.values();
 
   // Are there black & white blocks mixed together?
   // If yes, return false immediately
   if (this.puzzle.hasBlackWhite) {
     var hasWhite = false;
     var hasBlack = false;
-    for (v of segmentCoords) {
-      var block = this.blockMap.getBlock(v);
+    for (e of segment.entries()) {
+      var block = this.blockMap.getBlock(e[0]);
       if (block.blockType == BlockType.White) hasWhite = true;
       if (block.blockType == BlockType.Black) hasBlack = true;
       if (hasWhite && hasBlack) return false;
@@ -180,11 +176,10 @@ Path.prototype.evaluateSegment = function (segment) {
     offsets.add(new Vector2(0, 1));
     offsets.add(new Vector2(1, 1));
     offsets.add(new Vector2(1, 0));
-    var offsetCoords = offsets.values();
 
-    for (v of segmentCoords) {
-      for (o of offsetCoords) {
-        var nodeCoord = v.add(o);
+    for (e1 of segment.entries()) {
+      for (e2 of offsets.entries()) {
+        var nodeCoord = e1[0].add(e2[0]);
         if (!this.visitedNodes.contains(nodeCoord)) {
           unvisitedNodes.add(nodeCoord);
         }
@@ -193,9 +188,8 @@ Path.prototype.evaluateSegment = function (segment) {
 
     // Are there unvisited essential nodes?
     // If yes, return false immediately
-    var unvisitedNodeCoords = unvisitedNodes.values();
-    for (v of unvisitedNodeCoords) {
-      if (this.puzzle.getNode(v).isEssential) {
+    for (e of unvisitedNodes.entries()) {
+      if (this.puzzle.getNode(e[0]).isEssential) {
         return false;
       }
     }
@@ -204,30 +198,28 @@ Path.prototype.evaluateSegment = function (segment) {
   // Find all the unvisited sides in segment
   if (this.puzzle.sideEssentials.size() > 0) {
     var unvisitedSides = new HashSet();
-    for (v of segmentCoords) {
-      var corner1 = v.add(new Vector2(0, 0));
-      var corner2 = v.add(new Vector2(0, 1));
-      var corner3 = v.add(new Vector2(1, 1));
-      var corner4 = v.add(new Vector2(1, 0));
+    for (e of segment.entries()) {
+      var corner1 = e[0].add(new Vector2(0, 0));
+      var corner2 = e[0].add(new Vector2(0, 1));
+      var corner3 = e[0].add(new Vector2(1, 1));
+      var corner4 = e[0].add(new Vector2(1, 0));
       var sides = new HashSet();
       sides.add(new Side(corner1, corner2));
       sides.add(new Side(corner2, corner3));
       sides.add(new Side(corner3, corner4));
       sides.add(new Side(corner4, corner1));
 
-      var sideValues = sides.values();
-      for (s of sideValues) {
-        if (!this.visitedSides.contains(s)) {
-          unvisitedSides.add(s.clone()); // clone() probably isn't necessary
+      for (e of sides.entries()) {
+        if (!this.visitedSides.contains(e[0])) {
+          unvisitedSides.add(e[0].clone()); // clone() probably isn't necessary
         }
       }
     }
 
     // Are there unvisited essential sides?
     // If yes, return false immediately
-    var unvisitedSideCoords = unvisitedSides.values();
-    for (s of unvisitedSideCoords) {
-      if (this.puzzle.sideEssentials.contains(s)) {
+    for (e of unvisitedSides.entries()) {
+      if (this.puzzle.sideEssentials.contains(e[0])) {
         return false;
       }
     }
@@ -241,8 +233,8 @@ Path.prototype.evaluateSegment = function (segment) {
     var tetrisAreaSum = 0;
     var segmentArea = segment.size();
     var hasTetris = false;
-    for (v of segmentCoords) {
-      var block = this.blockMap.getBlock(v);
+    for (e of segment.entries()) {
+      var block = this.blockMap.getBlock(e[0]);
       if (block.blockType >= 3) {
         hasTetris = true;
         var tetris = new Tetris(block.blockType);
@@ -388,17 +380,16 @@ Path.prototype.processRemainingSegments = function () {
 }
 
 Path.prototype.fitSegmentWithTetris = function (segment, tetrisList) {
-  var segmentCoords = segment.values();
-
   // Base case
-  if (segmentCoords.length == 0 && tetrisList.length == 0) {
+  if (segment.size() == 0 && tetrisList.length == 0) {
     return true;
   }
 
   // Recursive case
   // For every block, see if we can fit & grow a tetris piece on it
   // We always pick the last piece of tetrisVector (easier to remove)
-  for (segmentCoord of segmentCoords) {
+  for (e of segment.entries()) {
+    var segmentCoord = e[0];
     var tetris = tetrisList[tetrisList.length - 1];
     var canFit = true;
     for (tetrisCoordOffset of tetris.shape) {

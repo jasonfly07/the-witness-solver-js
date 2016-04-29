@@ -34,8 +34,8 @@ function Puzzle (numR, numC) {
 Puzzle.prototype.print = function () {
   console.log("head:");
   var headStr = "";
-  for (v of this.nodeHeads.values()) {
-    headStr = headStr + v.toString();
+  for (e of this.nodeHeads.entries()) {
+    headStr = headStr + e[0].toString();
   }
   console.log(headStr);
 };
@@ -145,25 +145,21 @@ Puzzle.prototype.convertBlackWhiteToEssentialSides = function () {
 
 Puzzle.prototype.regenerate = function () {
   // Set heads & tails
-  var nodeHeads = this.nodeHeads.values();
-  for (v of nodeHeads) {
-    this.getNode(v).isHead = true;
+  for (e of this.nodeHeads.entries()) {
+    this.getNode(e[0]).isHead = true;
   }
-  var nodeTails = this.nodeTails.values();
-  for (v of nodeTails) {
-    this.getNode(v).isTail = true;
+  for (e of this.nodeTails.entries()) {
+    this.getNode(e[0]).isTail = true;
   }
 
   // Set essentials
-  var nodeEssentials = this.nodeEssentials.values();
-  for (v of nodeEssentials) {
-    this.getNode(v).isEssential = true;
+  for (e of this.nodeEssentials.entries()) {
+    this.getNode(e[0]).isEssential = true;
   }
 
   // Set obstacles
-  var sideObstacles = this.sideObstacles.values();
-  for (s of sideObstacles) {
-    this.nodeMap.cutTie(s.vec1, s.vec2);
+  for (e of this.sideObstacles.entries()) {
+    this.nodeMap.cutTie(e[0].vec1, e[1].vec2);
   }
 
   // Set blocks

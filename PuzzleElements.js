@@ -11,8 +11,8 @@ function Node (v) {
 Node.prototype.getNeighborCoords = function () {
   var neighborCoords = new HashSet();
 
-  var neighborOffsets = this.neighborOffsets.values();
-  for (offset of neighborOffsets) {
+  for (e of this.neighborOffsets.entries()) {
+    var offset = e[0];
     var neighborCoord = this.coord.add(offset);
     neighborCoords.add(neighborCoord);
   }
@@ -52,8 +52,8 @@ function Block (v) {
 Block.prototype.getNeighborCoords = function () {
   var neighborCoords = new HashSet();
 
-  var neighborOffsets = this.neighborOffsets.values();
-  for (offset of neighborOffsets) {
+  for (e of this.neighborOffsets.entries()) {
+    var offset = e[0];
     var neighborCoord = this.coord.add(offset);
     neighborCoords.add(neighborCoord);
   }

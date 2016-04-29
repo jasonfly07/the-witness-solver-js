@@ -15,10 +15,9 @@ PuzzleSolver.prototype.initialize = function () {
   this.pathPQ.clear();
 
   // Seed the priority queue
-  var nodeHeads = this.puzzle.nodeHeads.values();
-  for (v of nodeHeads) {
+  for (e of this.puzzle.nodeHeads.entries()) {
     var path = new Path(this.puzzle);
-    path.addNode(v);
+    path.addNode(e[0]);
     this.pathPQ.queue(path);
   }
 }
@@ -32,20 +31,19 @@ PuzzleSolver.prototype.expand = function (currPath) {
   // If 2 or 3 of them are (unvisited) essential sides, this path is screwed
   var currEssentialSideCount = 0;
   var currNode = currPath.prevNode();
-  var currNodeNeighborCoords = currNode.getNeighborCoords().values();
-  for (v of currNodeNeighborCoords) {
-    if (!currPath.visitedNodes.contains(v)) {
-      if (this.puzzle.sideEssentials.contains(new Side(currNode.coord, v))) {
+  for (e of currNode.getNeighborCoords().entries()) {
+    if (!currPath.visitedNodes.contains(e[0])) {
+      if (this.puzzle.sideEssentials.contains(new Side(currNode.coord, e[0]))) {
         currEssentialSideCount++;
       }
     }
   }
 
   if (currEssentialSideCount == 0) {
-    for (v of currNodeNeighborCoords) {
-      if (!currPath.visitedNodes.contains(v)) {
+    for (e of currNode.getNeighborCoords().entries()) {
+      if (!currPath.visitedNodes.contains(e[0])) {
         var newPath = currPath.clone();
-        var isValid = newPath.addNode(v);
+        var isValid = newPath.addNode(e[0]);
         if (isValid) {
           this.pathPQ.queue(newPath);
         }
@@ -53,11 +51,11 @@ PuzzleSolver.prototype.expand = function (currPath) {
     }
   }
   else if (currEssentialSideCount == 1) {
-    for (v of currNodeNeighborCoords) {
-      if (!currPath.visitedNodes.contains(v)) {
-        if (this.puzzle.sideEssentials.contains(new Side(currNode.coord, v))) {
+    for (e of currNode.getNeighborCoords().entries()) {
+      if (!currPath.visitedNodes.contains(e[0])) {
+        if (this.puzzle.sideEssentials.contains(new Side(currNode.coord, e[0]))) {
           var newPath = currPath.clone();
-          var isValid = newPath.addNode(v);
+          var isValid = newPath.addNode(e[0]);
           if (isValid) {
             this.pathPQ.queue(newPath);
           }

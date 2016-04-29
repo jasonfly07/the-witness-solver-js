@@ -116,4 +116,8 @@ function HashSet(param1, param2) {
         }
         return complement;
     };
+
+    this.entries = function() {
+        return hashTable.entries();
+    }
 }
