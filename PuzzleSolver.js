@@ -4,7 +4,9 @@ function PuzzleSolver (puzzle, maxNumOutput) {
   this.paths = [];
 
   // Create the priority queue for A-star
-  this.pathPQ = new PriorityQueue({ comparator: function(pa, pb) { return pa.cost() - pb.cost(); }});
+  this.pathPQ = new PriorityQueue({ 
+    comparator: function(pa, pb) { return (pa.costG + pa.costH) - (pb.costG + pb.costH); }
+  });
 };
 
 PuzzleSolver.prototype.initialize = function () {
@@ -74,6 +76,9 @@ PuzzleSolver.prototype.solve = function () {
   // Perform A-star
   while (this.pathPQ.length != 0) {
     var currPath = this.pathPQ.dequeue();
+
+    // currPath.print();
+    // console.log("cost", currPath.costG, currPath.costH);
 
     // Has it reached a tail?
     if (currPath.prevNode().isTail) {

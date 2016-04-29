@@ -11,9 +11,14 @@ function Path (puzzle) {
   this.segmenting = false;
 
   this.visitedNodes = new HashSet();
-  this.visitedTails = new HashSet();
   this.visitedSides = new HashSet();
-  this.visitedEssentialNodes = new HashSet();
+
+  this.unvisitedTails = puzzle.nodeTails.clone();
+  this.unvisitedEssentialNodes = puzzle.nodeEssentials.clone();
+  this.unvisitedEssentialSides = puzzle.sideEssentials.clone();
+
+  this.costG = 0;
+  this.costH = 0;
 };
 
 Path.prototype.toString = function () {
@@ -41,61 +46,86 @@ Path.prototype.clone = function () {
   copy.segmenting = this.segmenting;
 
   copy.visitedNodes = this.visitedNodes.clone();
-  copy.visitedTails = this.visitedTails.clone();
   copy.visitedSides = this.visitedSides.clone();
-  copy.visitedEssentialNodes = this.visitedEssentialNodes.clone();
+
+  copy.unvisitedTails = this.unvisitedTails.clone();
+  copy.unvisitedEssentialNodes = this.unvisitedEssentialNodes.clone();
+  copy.unvisitedEssentialSides = this.unvisitedEssentialSides.clone();
+
+  copy.costG = this.costG;
+  copy.costH = this.costH;
 
   return copy;
 }
 
-// cost of A-star
-Path.prototype.costG = function () {
-  // g = length of current path
-  return this.path.length == 0 ? 0 : this.path.length - 1;
-}
-
-Path.prototype.costH = function () {
-  if (this.path.length == 0) {
-    return 0;
+Path.prototype.updateG = function () {
+  // g = length from head/last visited essential to current node
+  if (this.prevNode().isTail || this.prevNode().isEssential) {
+    this.costG = 0;
   }
-
-  if (this.prevNode().isTail) {
-    return 0;
-  }
-
-  // h = distance from current node to the closest tail
-  var currCoord = this.prevNode().coord;
-  var h = 0;
-  if (this.hasTailLeft()) {
-    var allTails = this.puzzle.nodeTails.values();
-    var minTailDist = this.puzzle.nodeRow + this.puzzle.nodeCol;
-    for (v of allTails) {
-      if (!this.visitedTails.contains(v)) {
-        var currTailDist = currCoord.distTo(v);
-        if (currTailDist < minTailDist) {
-          minTailDist = currTailDist;
-        }
-      }
+  else if (this.path.length >= 2) {
+    var prevSide = new Side(this.path[this.path.length - 1], this.path[this.path.length - 2]);
+    if (this.puzzle.sideEssentials.contains(prevSide)) {
+      this.costG = 0;
     }
-    h = minTailDist;
+    else {
+      this.costG += 1;
+    }
   }
   else {
-    h = this.puzzle.nodeRow * this.puzzle.nodeCol; // an arbitrarily large value
+    this.costG += 1;
+  }
+}
+
+Path.prototype.updateH = function () {
+  if (this.prevNode().isTail) {
+    this.costH = 0;
+    return;
   }
 
-  return h;
-}
+  // Are there unvisited essential nodes/sides?
+  // If yes, h = distance from current node to the closest essential
+  var currCoord = this.prevNode().coord;
+  if (this.unvisitedEssentialNodes.size() > 0 || this.unvisitedEssentialSides.size() > 0) {
+    var minDist = this.puzzle.nodeRow + this.puzzle.nodeCol;
+    
+    var unvisitedEssentialNodes = this.unvisitedEssentialNodes.values();
+    for (v of unvisitedEssentialNodes) {
+      var currDist = currCoord.distTo(v);
+      if (currDist < minDist) { minDist = currDist; }
+    }
 
-Path.prototype.cost = function () {
-  return this.costG() + this.costH();
-}
+    var unvisitedEssentialSides = this.unvisitedEssentialSides.values();
+    for (s of unvisitedEssentialSides) {
+      var currDist1 = currCoord.distTo(s.vec1);
+      var currDist2 = currCoord.distTo(s.vec2);
+      if (currDist1 < minDist) { minDist = currDist1; }
+      if (currDist2 < minDist) { minDist = currDist2; }
+    }
 
-Path.prototype.hasCollectedAllEssentialNodes = function () {
-  return this.puzzle.nodeEssentials.size() == this.visitedEssentialNodes.size();
+    this.costH = minDist;
+  }
+  // If no, check if there're unvisited tails
+  // If yes, h = distance from current node to the closest tail
+  else if (this.hasTailLeft()) {
+    var minDist = this.puzzle.nodeRow + this.puzzle.nodeCol;
+
+    var unvisitedTails = this.unvisitedTails.values();
+    for (v of unvisitedTails) {
+      var currDist = currCoord.distTo(v);
+      if (currDist < minDist) { minDist = currDist; }
+    }
+
+    this.costH = minDist;
+  }
+  // If there're no unvisited tails, this path is worthless
+  else {
+    this.costH = this.puzzle.nodeRow * this.puzzle.nodeCol; // an arbitrarily large value
+  }
 }
 
 Path.prototype.hasTailLeft = function () {
-  return (this.puzzle.nodeTails.size() == this.visitedTails.size()) ? false : true;
+  return !(this.unvisitedTails.size() == 0);
 }
 
 // Shortcut for accessing the last node in the path
@@ -315,15 +345,24 @@ Path.prototype.addNode = function (v) {
   // Finally, insert the node into relevant containers
   this.visitedNodes.add(v);
   if (this.path.length > 0) {
-    this.visitedSides.add(new Side(v, this.prevNode().coord));
+    var currSide = new Side(v, this.prevNode().coord);
+    this.visitedSides.add(currSide);
+    if (this.puzzle.sideEssentials.contains(currSide)) {
+      this.unvisitedEssentialSides.remove(currSide);
+    }
   }
   this.path.push(v);
   if (node.isEssential) {
-    this.visitedEssentialNodes.add(v);
+    this.unvisitedEssentialNodes.remove(v);
   }
   if (node.isTail) {
-    this.visitedTails.add(v);
+    this.unvisitedTails.remove(v);
   }
+
+  // Update the cost
+  this.updateG();
+  this.updateH();
+
   return true;
 }
 
