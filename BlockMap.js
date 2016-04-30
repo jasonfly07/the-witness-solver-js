@@ -18,6 +18,7 @@ function BlockMap (i0, i1) {
     }
     this.resetConnectivity();
   }
+  // copy constructor
   else if (i0.constructor.name === "BlockMap") {
     var orig = i0;
     this.numRow = orig.numRow;
@@ -106,13 +107,3 @@ BlockMap.prototype.segment = function (v) {
   } 
   return segment;
 }
-
-// BlockMap.prototype.clone = function () {
-//   var copy = new BlockMap(this.numRow, this.numCol);
-//   for (r = 0; r < copy.numRow; r++) {
-//     for (c = 0; c < copy.numCol; c++) {
-//       copy.blockMatrix[r][c] = this.blockMatrix[r][c].clone();
-//     }
-//   }
-//   return copy;
-// }

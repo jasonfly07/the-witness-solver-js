@@ -159,7 +159,7 @@ Puzzle.prototype.regenerate = function () {
 
   // Set obstacles
   for (e of this.sideObstacles.entries()) {
-    this.nodeMap.cutTie(e[0].vec1, e[1].vec2);
+    this.nodeMap.cutTie(e[0].vec1, e[0].vec2);
   }
 
   // Set blocks

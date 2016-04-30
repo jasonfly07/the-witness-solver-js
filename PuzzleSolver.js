@@ -42,7 +42,7 @@ PuzzleSolver.prototype.expand = function (currPath) {
   if (currEssentialSideCount == 0) {
     for (e of currNode.getNeighborCoords().entries()) {
       if (!currPath.visitedNodes.contains(e[0])) {
-        var newPath = currPath.clone();
+        var newPath = new Path(currPath);
         var isValid = newPath.addNode(e[0]);
         if (isValid) {
           this.pathPQ.queue(newPath);
@@ -54,7 +54,7 @@ PuzzleSolver.prototype.expand = function (currPath) {
     for (e of currNode.getNeighborCoords().entries()) {
       if (!currPath.visitedNodes.contains(e[0])) {
         if (this.puzzle.sideEssentials.contains(new Side(currNode.coord, e[0]))) {
-          var newPath = currPath.clone();
+          var newPath = new Path(currPath);
           var isValid = newPath.addNode(e[0]);
           if (isValid) {
             this.pathPQ.queue(newPath);
@@ -82,7 +82,7 @@ PuzzleSolver.prototype.solve = function () {
     if (currPath.prevNode().isTail) {
 
       // Make a copy, since a path can still continue exploring after reaching a tail
-      var endPath = currPath.clone();
+      var endPath = new Path(currPath);
 
       // At this point there would be 1 - 2 unprocessed segments.
       // Find them and process them.

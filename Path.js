@@ -1,24 +1,51 @@
 // A path object is used by the solver to record the history of searching
 // It contains all node visited, essential node counts, etc.
-function Path (puzzle) {
-  this.puzzle = puzzle;
-  this.path = [];
-  this.blockMap = new BlockMap(puzzle.blockMap);
+// function Path (puzzle) {
+function Path (i) {
+  if (i.constructor.name === "Puzzle") {
+    this.puzzle = i;
+    this.path = [];
+    this.blockMap = new BlockMap(i.blockMap);
 
-  this.touchCount = 0;
-  this.leaveCount = 0;
-  this.missedTailCount = 0;
-  this.segmenting = false;
+    this.touchCount = 0;
+    this.leaveCount = 0;
+    this.missedTailCount = 0;
+    this.segmenting = false;
 
-  this.visitedNodes = new HashSet();
-  this.visitedSides = new HashSet();
+    this.visitedNodes = new HashSet();
+    this.visitedSides = new HashSet();
 
-  this.unvisitedTails = puzzle.nodeTails.clone();
-  this.unvisitedEssentialNodes = puzzle.nodeEssentials.clone();
-  this.unvisitedEssentialSides = puzzle.sideEssentials.clone();
+    this.unvisitedTails = i.nodeTails.clone();
+    this.unvisitedEssentialNodes = i.nodeEssentials.clone();
+    this.unvisitedEssentialSides = i.sideEssentials.clone();
 
-  this.costG = 0;
-  this.costH = 0;
+    this.costG = 0;
+    this.costH = 0;
+  }
+  // copy constructor
+  else if (i.constructor.name === "Path") {
+    this.puzzle = i.puzzle;
+    this.path = [];
+    for (k = 0; k < i.path.length; k++) {
+      this.path.push(i.path[k]);
+    }
+    this.blockMap = new BlockMap(i.blockMap);
+
+    this.touchCount = i.touchCount;
+    this.leaveCount = i.leaveCount;
+    this.missedTailCount = i.missedTailCount;
+    this.segmenting = i.segmenting;
+
+    this.visitedNodes = i.visitedNodes.clone();
+    this.visitedSides = i.visitedSides.clone();
+
+    this.unvisitedTails = i.unvisitedTails.clone();
+    this.unvisitedEssentialNodes = i.unvisitedEssentialNodes.clone();
+    this.unvisitedEssentialSides = i.unvisitedEssentialSides.clone();
+
+    this.costG = i.costG;
+    this.costH = i.costH;
+  }
 };
 
 Path.prototype.toString = function () {
@@ -33,30 +60,30 @@ Path.prototype.print = function () {
   console.log(this.toString());
 }
 
-Path.prototype.clone = function () {
-  var copy = new Path(this.puzzle);
-  for (i = 0; i < this.path.length; i++) {
-    copy.path.push(this.path[i]);
-  }
-  copy.blockMap =  new BlockMap(this.blockMap);
+// Path.prototype.clone = function () {
+//   var copy = new Path(this.puzzle);
+//   for (i = 0; i < this.path.length; i++) {
+//     copy.path.push(this.path[i]);
+//   }
+//   copy.blockMap =  new BlockMap(this.blockMap);
 
-  copy.touchCount = this.touchCount;
-  copy.leaveCount = this.leaveCount;
-  copy.missedTailCount = this.missedTailCount;
-  copy.segmenting = this.segmenting;
+//   copy.touchCount = this.touchCount;
+//   copy.leaveCount = this.leaveCount;
+//   copy.missedTailCount = this.missedTailCount;
+//   copy.segmenting = this.segmenting;
 
-  copy.visitedNodes = this.visitedNodes.clone();
-  copy.visitedSides = this.visitedSides.clone();
+//   copy.visitedNodes = this.visitedNodes.clone();
+//   copy.visitedSides = this.visitedSides.clone();
 
-  copy.unvisitedTails = this.unvisitedTails.clone();
-  copy.unvisitedEssentialNodes = this.unvisitedEssentialNodes.clone();
-  copy.unvisitedEssentialSides = this.unvisitedEssentialSides.clone();
+//   copy.unvisitedTails = this.unvisitedTails.clone();
+//   copy.unvisitedEssentialNodes = this.unvisitedEssentialNodes.clone();
+//   copy.unvisitedEssentialSides = this.unvisitedEssentialSides.clone();
 
-  copy.costG = this.costG;
-  copy.costH = this.costH;
+//   copy.costG = this.costG;
+//   copy.costH = this.costH;
 
-  return copy;
-}
+//   return copy;
+// }
 
 Path.prototype.updateG = function () {
   // g = length from head/last visited essential to current node
@@ -211,7 +238,7 @@ Path.prototype.evaluateSegment = function (segment) {
 
       for (e of sides.entries()) {
         if (!this.visitedSides.contains(e[0])) {
-          unvisitedSides.add(e[0].clone()); // clone() probably isn't necessary
+          unvisitedSides.add(new Side(e[0])); // clone() probably isn't necessary
         }
       }
     }

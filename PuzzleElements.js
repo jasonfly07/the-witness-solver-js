@@ -49,6 +49,7 @@ function Block (i) {
     this.blockType = BlockType.Empty;
     this.visited = false;
   }
+  // copy constructor
   else if (i.constructor.name === "Block") {
     this.coord = i.coord.clone();
     this.neighborOffsets = i.neighborOffsets.clone();
@@ -68,39 +69,39 @@ Block.prototype.getNeighborCoords = function () {
   return neighborCoords;
 };
 
-// Block.prototype.clone = function() {
-//   var copy = new Block(this.coord);
-//   copy.visited = this.visited;
-//   copy.blockType = this.blockType;
-//   copy.neighborOffsets = this.neighborOffsets.clone();
-//   return copy;
-// }
-
 //// Side
-function Side (v1, v2) {
-  if (v1.distTo(v2) != 1) {
-    throw "Invalid side input";
-  }
+function Side (i0, i1) {
+  if (i0.constructor.name === "Vector2" && i1.constructor.name === "Vector2") {
+    var v1 = i0;
+    var v2 = i1;
+    if (v1.distTo(v2) != 1) {
+      throw "Invalid side input";
+    }
 
-  var v1Copy = v1.clone();
-  var v2Copy = v2.clone();
-  if (v1.r < v2.r) {
-    this.vec1 = v1Copy;
-    this.vec2 = v2Copy;
-  }
-  else if (v1.r == v2.r) {
-    if (v1.c <= v2.c) {
+    var v1Copy = v1.clone();
+    var v2Copy = v2.clone();
+    if (v1.r < v2.r) {
       this.vec1 = v1Copy;
       this.vec2 = v2Copy;
+    }
+    else if (v1.r == v2.r) {
+      if (v1.c <= v2.c) {
+        this.vec1 = v1Copy;
+        this.vec2 = v2Copy;
+      }
+      else {
+        this.vec1 = v2Copy;
+        this.vec2 = v1Copy;
+      }
     }
     else {
       this.vec1 = v2Copy;
       this.vec2 = v1Copy;
     }
   }
-  else {
-    this.vec1 = v2Copy;
-    this.vec2 = v1Copy;
+  else if (i0.constructor.name === "Side") {
+    this.vec1 = i0.vec1.clone();
+    this.vec2 = i0.vec2.clone();
   }
 };
 
@@ -112,10 +113,6 @@ Side.prototype.isHorizontal = function () {
 Side.prototype.equals = function (other) {
   return (this.vec1.equals(other.vec1) && this.vec2.equals(other.vec2)) ? true : false;
 };
-
-Side.prototype.clone = function () {
-  return new Side(this.vec1.clone(), this.vec2.clone());
-}
 
 Side.prototype.toString = function () {
   return this.vec1.toString() + "-" + this.vec2.toString();

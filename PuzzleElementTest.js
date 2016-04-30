@@ -26,6 +26,12 @@ var TestHashSet = function() {
   vecs.remove(new Vector2(1, 2));
   vecs.remove(new Vector2(2, 1));
   assert(vecs.size() == 3);
+
+  // var ht = new Hashtable();
+  // ht.put(1, "one");
+  // ht.put(2, "two");
+  // ht.put(3, "three");
+  // console.log(ht.buckets);
 }
 
 var TestPriorityQueue = function() {
