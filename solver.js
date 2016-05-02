@@ -9,8 +9,7 @@ var ToggleType = {
 };
 
 $(document).ready(function() {
-  // TODO: remove
-  PuzzleElementTest();
+  // PuzzleElementTest();
   // PuzzleSolverTest();
 
   // parameters for puzzle dimensions
@@ -21,6 +20,7 @@ $(document).ready(function() {
   var vertMarginHeight = 0;
   var horiMarginHeight = 0;
   var horiMarginWidth  = 0;
+  var canSolve = false;
 
   // none, start/end, essential/obstacle, black/white
   var numElement = 7;
@@ -124,7 +124,9 @@ $(document).ready(function() {
   });
 
   $("#execute-btn-solve").click(function() {
-    Solve(puzzle);
+    if (canSolve) {
+      Solve(puzzle);
+    }
   });
 
   $(".execute-btn")
@@ -227,6 +229,16 @@ $(document).ready(function() {
         puzzle.addEssentialNode(v);
         DrawEssentialNode(r, c);
       }
+    }
+
+    // Update canSolve by checking number of heads and tails
+    if (puzzle.nodeHeads.size() > 0 && puzzle.nodeTails.size() > 0) {
+      canSolve = true;
+      document.getElementById("execute-btn-solve").style.opacity = 1.0;
+    }
+    else {
+      canSolve = false;
+      document.getElementById("execute-btn-solve").style.opacity = 0.25;
     }
   });
 

@@ -149,6 +149,7 @@
   color: #ecf3d0;
   margin-left: 12px;
   margin-top: 5px;
+  opacity: 0.25;
 }
 
 #execute-btn-reset {
@@ -285,4 +286,13 @@
   width: 46px;
   height: 46px;
   opacity: 0.65;
+}
+
+.puzzle-bottom {
+  position: relative;
+  float: left;
+  width: 480px;
+  height: 60px;
+  margin-left: 120px;
+  font-size: 14px;
 }
