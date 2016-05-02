@@ -13,11 +13,11 @@ $(document).ready(function() {
   PuzzleElementTest();
   // PuzzleSolverTest();
 
+  // parameters for puzzle dimensions
   var numRow = 2;
   var numCol = 2;
   var blockSide = 0;
   var pathWidth = 0;
-
   var vertMarginHeight = 0;
   var horiMarginHeight = 0;
   var horiMarginWidth  = 0;
@@ -26,7 +26,8 @@ $(document).ready(function() {
   var numElement = 7;
   var elementToggle = ToggleType.None;
 
-  $(".toolbar-col").on("click", "#btn-col-minus", function() {
+  // $(".toolbar-col").on("click", "#btn-col-minus", function() {
+  $("#btn-col-minus").click( function() {
     if (numCol > 2) {
       numCol--;
       DrawPuzzleGrid();
@@ -35,7 +36,7 @@ $(document).ready(function() {
     } 
   });
 
-  $(".toolbar-col").on("click", "#btn-col-plus", function() {
+  $("#btn-col-plus").click( function() {
     if (numCol < 6) {
       numCol++;
       DrawPuzzleGrid();
@@ -44,7 +45,7 @@ $(document).ready(function() {
     } 
   });
 
-  $(".toolbar-row").on("click", "#btn-row-minus", function() {
+  $("#btn-row-minus").click( function() {
     if (numRow > 2) {
       numRow--;
       DrawPuzzleGrid();
@@ -53,7 +54,7 @@ $(document).ready(function() {
     } 
   });
 
-  $(".toolbar-row").on("click", "#btn-row-plus", function() {
+  $("#btn-row-plus").click( function() {
     if (numRow < 6) {
       numRow++;
       DrawPuzzleGrid();
@@ -62,7 +63,7 @@ $(document).ready(function() {
     } 
   });
 
-  $( ".rc-select" ).click( function() {
+  $(".rc-select").click( function() {
     var idStringList = this.id.split("-");
     if (idStringList[1] === "row") {
       numRow = parseInt(idStringList[2]) + 1;
@@ -104,21 +105,17 @@ $(document).ready(function() {
     }
   }
 
-  $( ".rc-square" )
+  $(".rc-square")
   .mouseover(function() {
-    // this.style.color = "#50543a";
     this.style.opacity = 0.75;
   })
   .mouseout(function() {
-    // this.style.color = "#727661";
     this.style.opacity = 0.65;
   })
   .mousedown(function() {
-    // this.style.color = "#282a1d";
     this.style.opacity = 1;
   })
   .mouseup(function() {
-    // this.style.color = "#727661";
     this.style.opacity = 0.75;
   });
 
@@ -144,8 +141,8 @@ $(document).ready(function() {
     this.style.color = "#ffc019";
   });
 
-  // Switch between different elements to add to the puzzle
-  $(".toolbar-element-btn").click(function() {
+  $(".toolbar-element-btn")
+  .click(function() {
     var clickedID = parseInt(this.id.split("-")[2]);
     if (elementToggle == clickedID) {
       elementToggle = 0;
@@ -163,9 +160,7 @@ $(document).ready(function() {
         btnElement.style.opacity = 0.25;
       }
     } 
-  });
-
-  $( ".toolbar-element-btn" )
+  })
   .mouseover(function() {
     this.style.opacity = 0.8;
   })
@@ -709,4 +704,3 @@ $(document).ready(function() {
   DrawPuzzleGrid();
   var puzzle = new Puzzle(numRow, numCol);
 });
-
