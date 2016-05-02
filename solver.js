@@ -124,6 +124,8 @@ $(document).ready(function() {
   });
 
   $("#execute-btn-solve").click(function() {
+    $(".puzzle-window").find(".path").remove();
+    puzzle.regenerate();
     if (canSolve) {
       Solve(puzzle);
     }
@@ -622,6 +624,17 @@ $(document).ready(function() {
       console.log("solution = ", ps.paths[0].toString());
       console.log("time = " + (t1 - t0) + " ms");
       DrawPath(ps.paths[0]);
+    }
+    // Draw a red head to indicate no solution
+    else {
+      console.log("No solution available.");
+      var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
+      var firstHead = (puzzle.nodeHeads.values())[0];
+      var head = document.getElementById("h-" + String(firstHead.r) + "-" + String(firstHead.c));
+      var pathHead = head.cloneNode(true);
+      pathHead.className  = "path";
+      pathHead.id  = "";
+      puzzleWindow.appendChild(pathHead);
     }
   }
   var DrawPath = function (path) {

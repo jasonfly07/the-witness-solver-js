@@ -144,6 +144,9 @@ Puzzle.prototype.convertBlackWhiteToEssentialSides = function () {
 }
 
 Puzzle.prototype.regenerate = function () {
+  this.nodeMap.resetConnectivity();
+  this.blockMap.resetConnectivity();
+
   // Set heads & tails
   for (e of this.nodeHeads.entries()) {
     this.getNode(e[0]).isHead = true;
