@@ -637,6 +637,7 @@ $(document).ready(function() {
       puzzleWindow.appendChild(pathHead);
     }
   }
+
   var DrawPath = function (path) {
     var puzzleWindow = document.getElementsByClassName("puzzle-window")[0];
 
